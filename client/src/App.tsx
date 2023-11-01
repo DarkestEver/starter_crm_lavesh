@@ -1,12 +1,14 @@
-import { Provider } from 'react-redux'
-import { BrowserRouter } from 'react-router-dom'
-import { PersistGate } from 'redux-persist/integration/react'
-import store, { persistor } from './store'
-import Theme from '@/components/template/Theme'
-import Layout from '@/components/layouts'
-import mockServer from './mock'
-import appConfig from '@/configs/app.config'
 import './locales'
+
+import store, { persistor } from './store'
+
+import { BrowserRouter } from 'react-router-dom'
+import Layout from '@/components/layouts'
+import { PersistGate } from 'redux-persist/integration/react'
+import { Provider } from 'react-redux'
+import Theme from '@/components/template/Theme'
+import appConfig from '@/configs/app.config'
+import mockServer from './mock'
 
 const environment = process.env.NODE_ENV
 

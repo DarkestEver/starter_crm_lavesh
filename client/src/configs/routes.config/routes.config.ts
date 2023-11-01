@@ -19,45 +19,88 @@ export const protectedRoutes = [
         authority: [],
     },
     {
-        key: 'singleMenuItem',
-        path: '/single-menu-view',
-        component: lazy(() => import('@/views/demo/SingleMenuView')),
+        key: 'cms',
+        path: '/cms',
+        component: lazy(() => import('@/views/Cms')),
         authority: [],
     },
     {
-        key: 'collapseMenu.item1',
-        path: '/collapse-menu-item-view-1',
-        component: lazy(() => import('@/views/demo/CollapseMenuItemView1')),
+        key: 'destination',
+        path: '/cms/destinations',
+        component: lazy(() => import('@/views/Cms/component/Destinations')),
         authority: [],
     },
     {
-        key: 'collapseMenu.item2',
-        path: '/collapse-menu-item-view-2',
-        component: lazy(() => import('@/views/demo/CollapseMenuItemView2')),
+        key: 'destination',
+        path: '/cms/destinations/edit',
+        component: lazy(() => import('@/views/Cms/component/destinations/DestinationEdit')),
         authority: [],
     },
     {
-        key: 'groupMenu.single',
-        path: '/group-single-menu-item-view',
-        component: lazy(() =>
-            import('@/views/demo/GroupSingleMenuItemView')
-        ),
+        key: 'home',
+        path: '/cms/home',
+        component: lazy(() => import('@/views/Cms/component/Home')),
         authority: [],
     },
     {
-        key: 'groupMenu.collapse.item1',
-        path: '/group-collapse-menu-item-view-1',
-        component: lazy(() =>
-            import('@/views/demo/GroupCollapseMenuItemView1')
-        ),
+        key: 'testimonials',
+        path: '/cms/testimonials',
+        component: lazy(() => import('@/views/Cms/component/Testimonials')),
         authority: [],
     },
     {
-        key: 'groupMenu.collapse.item2',
-        path: '/group-collapse-menu-item-view-2',
-        component: lazy(() =>
-            import('@/views/demo/GroupCollapseMenuItemView2')
-        ),
+        key: 'testimonials',
+        path: '/cms/testimonials/edit',
+        component: lazy(() => import('@/views/Cms/component/testimonials/TestimonialsEdit')),
         authority: [],
     },
+    {
+        key: 'blogs',
+        path: '/cms/blogs',
+        component: lazy(() => import('@/views/Cms/component/Blogs')),
+        authority: [],
+    },
+    {
+        key: 'blogs',
+        path: '/cms/blogs/edit',
+        component: lazy(() => import('@/views/Cms/component/blogs/BlogEdit')),
+        authority: [],
+    },
+    {
+        key: 'extras',
+        path: '/cms/extras',
+        component: lazy(() => import('@/views/Cms/component/Extras')),
+        authority: [],
+    },
+    {
+        key: 'about',
+        path: '/cms/about',
+        component: lazy(() => import('@/views/Cms/component/about')),
+        authority: [],
+    },
+    {
+        key: 'contact',
+        path: '/cms/contact',
+        component: lazy(() => import('@/views/Cms/component/contact')),
+        authority: [],
+    },
+    {
+        key: 'footer',
+        path: '/cms/footer',
+        component: lazy(() => import('@/views/Cms/component/Footer')),
+        authority: [],
+    },
+    {
+        key: 'hotels',
+        path: '/cms/hotels',
+        component: lazy(() => import('@/views/Cms/component/Hotels')),
+        authority: [],
+    },
+    {
+        key: 'hotels',
+        path: '/cms/hotels/edit',
+        component: lazy(() => import('@/views/Cms/component/hotels/HotelEdit')),
+        authority: [],
+    },
+    
 ]
