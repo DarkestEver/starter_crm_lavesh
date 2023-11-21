@@ -6,7 +6,7 @@ import Container from '@/components/shared/Container'
 import Tabs from '@/components/ui/Tabs'
 
 const Testimonial = lazy(() => import('./TestimonialContent'))
-const Seo = lazy(() => import('../common/Seo'))
+// const Seo = lazy(() => import('./Seo'))
 
 const { TabNav, TabList } = Tabs
 
@@ -18,11 +18,12 @@ const settingsMenu: Record<
     }
 > = {
     testimonial: { label: 'Testimonial', path: 'testimonial' },
-    seo: { label: 'Seo', path: 'seo' },
+    // seo: { label: 'Seo', path: 'seo' },
 }
 
 const TestimonialEdit = () => {
     const [currentTab, setCurrentTab] = useState('testimonial')
+    const preview = location.pathname.split('/').pop();
 
     const onTabChange = (val: string) => {
         setCurrentTab(val)
@@ -45,11 +46,11 @@ const TestimonialEdit = () => {
                 <div className="px-4 py-6">
                     <Suspense fallback={<></>}>
                         {currentTab === 'testimonial' && (
-                            <Testimonial  />
+                            <Testimonial preview={preview}  />
                         )}
-                        {currentTab === 'seo' && (
+                        {/* {currentTab === 'seo' && (
                             <Seo  />
-                        )}
+                        )} */}
                     </Suspense>
                 </div>
             </AdaptableCard>

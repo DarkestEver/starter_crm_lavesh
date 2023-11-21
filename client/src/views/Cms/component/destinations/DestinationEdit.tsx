@@ -1,13 +1,13 @@
-import { Suspense, lazy, useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Suspense, lazy, useState } from 'react'
 
 import AdaptableCard from '@/components/shared/AdaptableCard'
 import CMSBackButton from '../common/CMSBackButton'
 import Container from '@/components/shared/Container'
 import Tabs from '@/components/ui/Tabs'
+import { useLocation } from 'react-router-dom'
 
-const Content = lazy(() => import('./Content'))
-const Seo = lazy(() => import('../common/Seo'))
+const Content = lazy(() => import('./DestinationContent'))
+const Seo = lazy(() => import('./Seo'))
 
 const { TabNav, TabList } = Tabs
 const settingsMenu: Record<
@@ -22,6 +22,9 @@ const settingsMenu: Record<
 }
 
 const DestinationEdit = () => {
+    const location = useLocation()
+    const preview = location.pathname.split('/').pop();
+    
     const [currentTab, setCurrentTab] = useState('content')
 
     const onTabChange = (val: string) => {
@@ -45,7 +48,7 @@ const DestinationEdit = () => {
                 <div className="px-4 py-6">
                     <Suspense fallback={<></>}>
                         {currentTab === 'content' && (
-                            <Content />
+                            <Content preview={preview} />
                             )}
                         {currentTab === 'seo' && (
                           <Seo />

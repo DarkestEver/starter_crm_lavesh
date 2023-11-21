@@ -1,12 +1,11 @@
 import * as Yup from 'yup'
 
-import { FcPlus, FcTreeStructure } from 'react-icons/fc'
-import { Field, FieldArray, Form, Formik } from 'formik'
-import type { FieldInputProps, FormikProps } from 'formik'
-import { FormContainer, FormItem } from '@/components/ui/Form'
-import { HiOutlineGlobeAlt, HiOutlineMinusCircle, HiOutlineUserCircle } from 'react-icons/hi'
-
+import { FcRules, FcTimeline } from 'react-icons/fc'
+import { Field, Form, Formik } from 'formik'
+import { editMiddleSection, fetchHome, useAppDispatch } from './store'
+import { AdaptableCard } from '@/components/shared'
 import Button from '@/components/ui/Button'
+import { FormContainer } from '@/components/ui/Form'
 import FormDesription from '../common/FormDescription'
 import FormRow from '../common/FormRow'
 import Input from '@/components/ui/Input'
@@ -14,93 +13,80 @@ import Notification from '@/components/ui/Notification'
 import { Switcher } from '@/components/ui'
 import toast from '@/components/ui/toast'
 
-export type HomeFormModel = {
-    popularDestination: PageSection;
-    recommendedHotels: PageSection;
-    blogs: PageSection;
-    destinationsStats: PageSection;
+export type MiddleSectionForm = {
+    _id?: string;
+    popularDestinationHeading: string;
+    popularDestinationSubHeading: string;
+    recommendedHotelsHeading: string;
+    recommendedHotelsSubHeading: string;
+    blogsHeading: string;
+    blogsSubHeading: string;
+    destinationsStatsHeading: string;
+    destinationsStatsSubHeading: string;
     blockGuide: Boolean;
 }
 
-type PageSection = {
-    heading: string;
-    subHeading: string;
-};
-
 type props = {
-    data?: HomeFormModel
+    data?: MiddleSectionForm,
+    homeId?: string,
 }
 
 const validationSchema = Yup.object().shape({
-    popularDestination: Yup.object().shape({
-      heading: Yup.string().required('Heading is required'),
-      subHeading: Yup.string().required('Subheading is required'),
-    }),
-  
-    recommendedHotels: Yup.object().shape({
-      heading: Yup.string().required('Heading is required'),
-      subHeading: Yup.string().required('Subheading is required'),
-    }),
-  
-    blogs: Yup.object().shape({
-      heading: Yup.string().required('Heading is required'),
-      subHeading: Yup.string().required('Subheading is required'),
-    }),
-  
-    destinationsStats: Yup.object().shape({
-      heading: Yup.string().required('Heading is required'),
-      subHeading: Yup.string().required('Subheading is required'),
-    }),
-
-    blockGuide: Yup.boolean(),
+    popularDestinationHeading: Yup.string().required('Popular Destination Heading is required'),
+    popularDestinationSubHeading: Yup.string().required('Popular Destination Subheading is required'),
+    recommendedHotelsHeading: Yup.string().required('Recommended Hotels Heading is required'),
+    recommendedHotelsSubHeading: Yup.string().required('Recommended Hotels Subheading is required'),
+    blogsHeading: Yup.string().required('Blogs Heading is required'),
+    blogsSubHeading: Yup.string().required('Blogs Subheading is required'),
+    destinationsStatsHeading: Yup.string().required('Destinations Stats Heading is required'),
+    destinationsStatsSubHeading: Yup.string().required('Destinations Stats Subheading is required'),
+    blockGuide: Yup.boolean().required('Block Guide is required'),
   });
 
-
-const MiddleSection = ({
-    data = {
-        popularDestination: {
-            heading: "",
-            subHeading: ""
-        },
-        recommendedHotels: {
-            heading: "",
-            subHeading: ""
-        },
-        blogs: {
-            heading: "",
-            subHeading: ""
-        },
-        destinationsStats: {
-            heading: "",
-            subHeading: ""
-        },
-        blockGuide: true
+const MiddleSection = ({ data, homeId }: props) => {
+    const initialData = {
+        popularDestinationHeading: data?.popularDestinationHeading,
+        popularDestinationSubHeading: data?.popularDestinationSubHeading,
+        recommendedHotelsHeading: data?.recommendedHotelsHeading,
+        recommendedHotelsSubHeading: data?.recommendedHotelsSubHeading,
+        blogsHeading: data?.blogsHeading,
+        blogsSubHeading: data?.blogsSubHeading,
+        destinationsStatsHeading: data?.destinationsStatsHeading,
+        destinationsStatsSubHeading: data?.destinationsStatsSubHeading,
+        blockGuide: data?.blockGuide,
     }    
-}: props) => {
-    const onSetFormFile = (
-        form: FormikProps<HomeFormModel>,
-        field: FieldInputProps<HomeFormModel>,
-        file: File[]
-    ) => {
-        form.setFieldValue(field.name, URL.createObjectURL(file[0]))
-    }
+    const dispatch = useAppDispatch();
 
-    const onFormSubmit = (
-        values: HomeFormModel,
+    const onFormSubmit = async (
+        values: MiddleSectionForm,
         setSubmitting: (isSubmitting: boolean) => void
     ) => {
-        console.log('values', values)
-        toast.push(<Notification title={'Middle Section updated'} type="success" />, {
-            placement: 'top-center',
-        })
+        try {
+            setSubmitting(true);
+            const response = await dispatch(editMiddleSection({ id: homeId , values: values }));
+            if(response.meta.requestStatus == 'fulfilled'){
+                dispatch(fetchHome())
+                toast.push(<Notification title={'Middle Section updated'} type="success" />, {
+                    placement: 'top-center',
+                })
+            }
+        } catch (error) {
+            console.error("Error posting MiddleSection:", error);
+            toast.push(<Notification title={'Error please try  again later.'} type="danger" />, {
+                placement: 'top-center',
+            })
+        }
         setSubmitting(false)
     }
 
 
     return (
+        <AdaptableCard>
+        <div className="max-w-[800px] mx-auto">
+            
         <Formik
             enableReinitialize
-            initialValues={data}
+            initialValues={initialData}
             validationSchema={validationSchema}
             onSubmit={(values, { setSubmitting }) => {
                 setSubmitting(true)
@@ -115,29 +101,119 @@ const MiddleSection = ({
                     <Form>
                         <FormContainer>
                             <FormDesription
-                                title="Home Page"
+                                title="Popular Destinaiton"
                                 desc="Basic info for your home page"
                             />
                            
-                           <FormRow name="popularDestination" label="Popular Destination" {...validatorProps}>
-                                <Field type="text" name="popularDestination.heading" placeholder="Popular Destinations" component={Input} className="mb-2" />
-                                <Field type="text" name="popularDestination.subHeading" placeholder="These popular destinations have a lot to offer" component={Input} />
+                           <FormRow name="popularDestinationHeading" label="Heading" {...validatorProps} border={false}>
+                                <Field type="text" name="popularDestinationHeading" placeholder="Popular Destinations" 
+                                    component={Input} className="mb-2" 
+                                    prefix={
+                                        <FcRules className="text-xl" />
+                                    }
+                                />
+                            </FormRow>
+                                
+                           <FormRow name="popularDestinationSubHeading" label="Sub Heading" {...validatorProps}>
+                                <Field 
+                                    type="text" name="popularDestinationSubHeading" placeholder="These popular destinations have a lot to offer" component={Input} 
+                                    prefix={
+                                        <FcTimeline className="text-xl" />
+                                    }
+                                />
                             </FormRow>
 
-                            <FormRow name="recommendedHotels" label="Recommended Hotels" {...validatorProps}>
-                                <Field type="text" name="recommendedHotels.heading" placeholder="Recommended Hotels" component={Input} className="mb-2" />
-                                <Field type="text" name="recommendedHotels.subHeading" placeholder="Discover Our Handpicked Collection of Exceptional Hotels - Your Ideal Stay Awaits!" component={Input} />
+                            <FormDesription
+                                title="Recommended Hotels"
+                                desc="Basic info for your home page"
+                                className='mt-3'
+                            />
+                            <FormRow name="recommendedHotelsHeading" label="Heading" {...validatorProps} border={false}>
+                            <Field
+                                type="text"
+                                name="recommendedHotelsHeading"
+                                placeholder="Recommended Hotels"
+                                component={Input}
+                                className="mb-2"
+                                prefix={
+                                    <FcRules className="text-xl" />
+                                }
+                            />
+                            </FormRow>
+                            <FormRow name="recommendedHotelsSubHeading" label="Sub Heading" {...validatorProps}>
+                            <Field
+                                type="text"
+                                name="recommendedHotelsSubHeading"
+                                placeholder="Stay at the best hotels"
+                                component={Input}
+                                prefix={
+                                    <FcTimeline className="text-xl" />
+                                }
+                            />
                             </FormRow>
 
-                            <FormRow name="blogs" label="Blogs" {...validatorProps}>
-                                <Field type="text" name="blogs.heading" placeholder="Get inspiration for your next trip" component={Input} className="mb-2" />
-                                <Field type="text" name="blogs.subHeading" placeholder="Explore Travel Blogs for Ultimate Adventure Inspiration" component={Input} />
+                            <FormDesription
+                                title="Blogs"
+                                desc="Basic info for your home page"
+                                className='mt-3'
+                            />
+
+                            <FormRow name="blogsHeading" label="Heading" {...validatorProps} border={false}>
+                            <Field
+                                type="text"
+                                name="blogsHeading"
+                                placeholder="Latest Travel Blogs"
+                                component={Input}
+                                className="mb-2"
+                                prefix={
+                                    <FcRules className="text-xl" />
+                                }
+                            />
                             </FormRow>
 
-                            <FormRow name="destinationsStats" label="Destinations Stats" {...validatorProps}>
-                                <Field type="text" name="destinationsStats.heading" placeholder="Destinations we love" component={Input} className="mb-2" />
-                                <Field type="text" name="destinationsStats.subHeading" placeholder="Embark on a Journey to Our Beloved Destinations" component={Input} />
+                            <FormRow name="blogsSubHeading" label="Sub Heading" {...validatorProps}>
+                            <Field
+                                type="text"
+                                name="blogsSubHeading"
+                                placeholder="Read interesting travel stories"
+                                component={Input}
+                                prefix={
+                                    <FcTimeline className="text-xl" />
+                                }
+                            />
                             </FormRow>
+
+                            <FormDesription
+                            title="Destination Stats"
+                            desc="Basic info for your home page"
+                            className='mt-3'
+                            />
+
+                            <FormRow name="destinationsStatsHeading" label="Heading" {...validatorProps} border={false}>
+                            <Field
+                                type="text"
+                                name="destinationsStatsHeading"
+                                placeholder="Destination Stats"
+                                component={Input}
+                                className="mb-2"
+                                prefix={
+                                    <FcRules className="text-xl" />
+                                }
+                            />
+                            </FormRow>
+
+                            <FormRow name="destinationsStatsSubHeading" label="Sub Heading" {...validatorProps}>
+                            <Field
+                                type="text"
+                                name="destinationsStatsSubHeading"
+                                placeholder="Get insights into popular destinations"
+                                component={Input}
+                                prefix={
+                                    <FcTimeline className="text-xl" />
+                                }
+                            />
+                            </FormRow>
+
                             <FormRow name="blockGuide" label="Block Guide" {...validatorProps}>
                                 <Field name="blockGuide" component={Switcher} />
                             </FormRow>
@@ -156,7 +232,7 @@ const MiddleSection = ({
                                     loading={isSubmitting}
                                     type="submit"
                                 >
-                                    {isSubmitting ? 'Updating' : 'Save'}
+                                    {isSubmitting ? 'Updating' : 'Edit'}
                                 </Button>
                             </div>
                         </FormContainer>
@@ -164,6 +240,9 @@ const MiddleSection = ({
                 )
             }}
         </Formik>
+        
+    </div>
+    </AdaptableCard>
     )
 }
 

@@ -1,15 +1,18 @@
-import { combineReducers, CombinedState, AnyAction, Reducer } from 'redux'
+import { AnyAction, CombinedState, Reducer, combineReducers } from 'redux'
 import auth, { AuthState } from './slices/auth'
 import base, { BaseState } from './slices/base'
 import locale, { LocaleState } from './slices/locale/localeSlice'
 import theme, { ThemeState } from './slices/theme/themeSlice'
+
 import RtkQueryService from '@/services/RtkQueryService'
+import destinationReducer from '../../src/views/Cms/component/destinations/store/destinationSlice';
 
 export type RootState = CombinedState<{
     auth: CombinedState<AuthState>
     base: CombinedState<BaseState>
     locale: LocaleState
     theme: ThemeState
+    // destination: destinationReducer,
     /* eslint-disable @typescript-eslint/no-explicit-any */
     [RtkQueryService.reducerPath]: any
 }>

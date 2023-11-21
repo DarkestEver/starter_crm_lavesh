@@ -1,23 +1,10 @@
 import { HiOutlineSearch, HiPencil } from 'react-icons/hi'
-import {
-    queryArticles,
-    setQueryText,
-    setSearch,
-    setSearchCategory,
-    useAppDispatch,
-    useAppSelector,
-} from '../../store'
-import { useRef, useState } from 'react'
-import { Field, Form } from 'formik'
+import { useState } from 'react'
 import Button from '@/components/ui/Button'
 import { ConfirmDialog } from '@/components/shared'
 import Container from '@/components/shared/Container'
 import InputGroup from '@/components/ui/InputGroup'
-import Notification from '@/components/ui/Notification'
 import Select from '@/components/ui/Select'
-import toast from '@/components/ui/toast'
-import { FormContainer, FormItem } from '@/components/ui/Form'
-import Input from '@/components/ui/Input'
 
 type Option = {
     label: string
@@ -33,7 +20,6 @@ const domainOptions: Option[] = [
 ]
 
 const TopSection = () => {
-    const dispatch = useAppDispatch()
     const [dialogOpen, setDialogOpen] = useState(false)
 
     const onConfirmDialogOpen = () => {
@@ -84,7 +70,7 @@ const TopSection = () => {
     // }
 
     return (
-        <section className="flex flex-row justify-center h-[140px] bg-blue-400 mb-4 rounded-2xl px-8 py-4 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-600">
+        <section className="flex flex-row justify-center h-[140px] bg-green-400 mb-4 rounded-2xl px-8 py-4 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-600">
             <Container className="flex flex-row px-4">
                 <div className='w-32 h-32'>
                     <img 
@@ -99,7 +85,7 @@ const TopSection = () => {
                     <h3 className="mb-2 text-sm text-white">
                         Domain:
                     </h3>
-                    <InputGroup className="mb-4 xl:min-w-[800px]">
+                    <InputGroup className="mb-4">
                     
                         <div className="min-w-[220px]">
                             <Select<Option>

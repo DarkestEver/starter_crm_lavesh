@@ -1,16 +1,12 @@
 import * as Yup from 'yup'
 
+import { ErrorMessage, Field, FieldArray, Form, Formik } from 'formik'
 import { FcPlus, FcTimeline, FcTreeStructure } from 'react-icons/fc';
-import { Field, FieldArray, Form, Formik } from 'formik'
-import type { FieldInputProps, FormikProps } from 'formik'
 import {
     HiOutlineGlobeAlt,
     HiOutlineMinusCircle,
-    HiOutlineUserCircle,
-    HiPlus,
 } from 'react-icons/hi'
-import { useEffect, useState } from "react";
-
+import { FooterFormModel, fetchFooterData, putFooterData, useAppDispatch } from './store';
 import Button from '@/components/ui/Button'
 import { FormContainer } from '@/components/ui/Form'
 import FormDesription from '../common/FormDescription'
@@ -20,19 +16,13 @@ import Notification from '@/components/ui/Notification'
 import Switcher from '@/components/ui/Switcher'
 import toast from '@/components/ui/toast'
 
-export type FooterFormModel = {
-    title: string;
-    menuList: Array<{ name: string; routerPath: string }>;
-    published: Boolean
-}
-
 type ProfileProps = {
     data?: FooterFormModel
 }
 
 const validationSchema = Yup.object().shape({
     published: Yup.boolean().required('Visibility is required'),
-    title: Yup.string().required('Footer Title is required'),
+    title: Yup.string().required('Required'),
     menuList: Yup.array()
       .of(
         Yup.object().shape({
@@ -44,44 +34,45 @@ const validationSchema = Yup.object().shape({
   });
 
 
-const Content3 = ({
-    data = {
-        title: '',
-        published: true,
-        menuList: [],
-    },
-}: ProfileProps) => {
-    const [ ispublished , setIspublished ] = useState(data.published);
-
-    useEffect(() => {
-        setIspublished(data.published);
-    }, [data.published]);
-
-    const onSetFormFile = (
-        form: FormikProps<FooterFormModel>,
-        field: FieldInputProps<FooterFormModel>,
-        file: File[]
-    ) => {
-        form.setFieldValue(field.name, URL.createObjectURL(file[0]))
+const Content3 = ({ data }: ProfileProps) => {
+    const dispatch = useAppDispatch();
+    const initialData = {
+        footerColumn: data?.footerColumn || 3,
+        title: data?.title || '',
+        published: data?.published || true,
+        menuList: (data?.menuList || []).map(item => ({
+            routerPath: item.routerPath || '',
+            name: item.name || ''
+          })),
     }
-
-    const onFormSubmit = (
+    
+    const onFormSubmit = async (
         values: FooterFormModel,
         setSubmitting: (isSubmitting: boolean) => void,
         resetForm: any
     ) => {
-        console.log('values', values)
-        toast.push(<Notification title={'Footer content3 updated'} type="success" />, {
-            placement: 'top-center',
-        })
-        resetForm()
+        try {
+            setSubmitting(true);
+            const response = await dispatch(putFooterData({ ...values, _id: data._id }));
+            if(response.meta.requestStatus === 'fulfilled'){
+                dispatch(fetchFooterData())
+                toast.push(<Notification title={'Footer content 3 updated'} type="success" />, {
+                    placement: 'top-center',
+                })
+            }
+          } catch (error) {
+              console.error("Error posting Extras:", error);
+              toast.push(<Notification title={'Error please try  again later.'} type="danger" />, {
+                  placement: 'top-center',
+              })
+          }
         setSubmitting(false)
     }
 
     return (
         <Formik
             enableReinitialize
-            initialValues={data}
+            initialValues={initialData}
             validationSchema={validationSchema}
             onSubmit={(values, { setSubmitting,resetForm }) => {
                 setSubmitting(true);
@@ -96,8 +87,8 @@ const Content3 = ({
                 <Form>
                     <FormContainer>
                     <FormDesription
-                        title="Footer Content 1"
-                        desc="Basic info for the content of footer 1"
+                        title="Footer Content 3"
+                        desc="Basic info for the content of footer 3"
                     />
 
                     <FormRow name="published" label="Published" {...validatorProps} border={false}>
@@ -117,14 +108,13 @@ const Content3 = ({
                             />
                         </FormRow>
 
-                        <FormRow name="title" label="Menu List" {...validatorProps}>
+                        <FormRow name="" label="Menu List" {...validatorProps}>
                         <FieldArray name="menuList">
                             {({ push, remove, form }) => (
                             <>
                                 {values.menuList.map((menu, index) => (
                                 <div key={index} className="flex justify-between gap-4 mb-2">
                                     <div>
-                                    <FormRow name={`menuList.${index}.name`} label="Name" {...validatorProps}>
                                         <Field
                                         type="text"
                                         autoComplete="off"
@@ -133,10 +123,9 @@ const Content3 = ({
                                         component={Input}
                                         prefix={<FcTreeStructure className="text-xl" />}
                                         />
-                                    </FormRow>
+                                        <ErrorMessage className='text-red-400' name={`menuList.${index}.name`} />
                                     </div>
                                     <div>
-                                    <FormRow name={`menuList.${index}.routerPath`} label="RouterPath" {...validatorProps}>
                                         <Field
                                         type="text"
                                         autoComplete="off"
@@ -145,7 +134,7 @@ const Content3 = ({
                                         component={Input}
                                         prefix={<HiOutlineGlobeAlt className="text-xl text-blue-500" />}
                                         />
-                                    </FormRow>
+                                        <ErrorMessage className='text-red-400' name={`menuList.${index}.routerPath`} />
                                     </div>
                                     <button type="button" onClick={() => remove(index)}>
                                     <HiOutlineMinusCircle size={22} className="rounded-full hover:bg-red-400 hover:text-white" />
@@ -179,7 +168,7 @@ const Content3 = ({
                         Reset
                         </Button>
                         <Button variant="solid" loading={isSubmitting} type="submit">
-                        {isSubmitting ? 'Updating' : 'Save'}
+                        {isSubmitting ? 'Updating' : 'Edit'}
                         </Button>
                     </div>
                     </FormContainer>

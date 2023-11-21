@@ -1,18 +1,21 @@
-import * as Yup from 'yup'
+import * as yup from 'yup'
 
 import { Field, Form, Formik } from 'formik'
-import type { FieldInputProps, FormikProps } from 'formik'
+import { HiOutlinePencil, HiOutlinePencilAlt, HiPencilAlt } from 'react-icons/hi'
+import { fetchNewsletter, putNewsletter, useAppDispatch } from './store'
 
 import Button from '@/components/ui/Button'
+import { FcAddColumn } from 'react-icons/fc'
 import { FormContainer } from '@/components/ui/Form'
 import FormDesription from '../common/FormDescription'
 import FormRow from '../common/FormRow'
-import { HiOutlineUserCircle } from 'react-icons/hi'
 import Input from '@/components/ui/Input'
 import Notification from '@/components/ui/Notification'
+import { deleteNewsletter } from './store/extrasSlice'
 import toast from '@/components/ui/toast'
 
-export type HomeFormModel = {
+export type NewsletterForm = {
+    id?: string;
     heading: string;
     subHeading: string;
     inputPlaceholder: string;
@@ -20,49 +23,59 @@ export type HomeFormModel = {
 }
 
 type props = {
-    data?: HomeFormModel
+    data?: NewsletterForm
 }
 
-const validationSchema = Yup.object().shape({
-    heading: Yup.string().required('Heading is required'),
-    subHeading: Yup.string().required('Subheading is required'),
-    inputPlaceholder: Yup.string().required('Input Placeholder is required'),
-    btnText: Yup.string().required('Button Text is required'),
+const newsletterSchema = yup.object().shape({
+    heading: yup.string().required('Heading is required'),
+    subHeading: yup.string().required('Subheading is required'),
+    inputPlaceholder: yup.string().required('Input Placeholder is required'),
+    btnText: yup.string().required('Button Text is required'),
 });
-
-const Newsletter = ({
-    data = {
-        heading: '',
-        subHeading: '',
-        inputPlaceholder: '',
-        btnText: '',
+  
+const Newsletter = ( {newsletterData} : props) => {
+    const dispatch = useAppDispatch();
+    const initialData = {
+        heading: newsletterData.heading || '', 
+        subHeading: newsletterData.subHeading || '',
+        inputPlaceholder: newsletterData.inputPlaceholder || '',
+        btnText: newsletterData.btnText || '' 
     }
-}: props) => {
-    const onSetFormFile = (
-        form: FormikProps<HomeFormModel>,
-        field: FieldInputProps<HomeFormModel>,
-        file: File[]
-    ) => {
-        form.setFieldValue(field.name, URL.createObjectURL(file[0]))
-    }
-
-
-    const onFormSubmit = (
-        values: HomeFormModel,
+    
+    const onFormSubmit = async (
+        values: NewsletterForm,
         setSubmitting: (isSubmitting: boolean) => void
     ) => {
-        console.log('values', values)
-        toast.push(<Notification title={'Newsletter content updated'} type="success" />, {
+        try {
+            setSubmitting(true);
+            const response = await dispatch(putNewsletter({ ...values, _id: newsletterData._id }));
+            if(response.meta.requestStatus == 'fulfilled'){
+                dispatch(fetchNewsletter())
+                toast.push(<Notification title={'Newsletter data updated'} type="success" />, {
+                    placement: 'top-center',
+                })
+            }
+        } catch (error) {
+            console.error("Error posting Extras:", error);
+            toast.push(<Notification title={'Error please try  again later.'} type="danger" />, {
+                placement: 'top-center',
+            })
+        }
+        setSubmitting(false)
+    }
+
+    const onDelete = async () => {
+        dispatch(deleteNewsletter(data[0]._id))
+        toast.push(<Notification title={'Newsletter data deleted'} type="success" />, {
             placement: 'top-center',
         })
-        setSubmitting(false)
     }
 
     return (
         <Formik
             enableReinitialize
-            initialValues={data}
-            validationSchema={validationSchema}
+            initialValues={initialData}
+            validationSchema={newsletterSchema}
             onSubmit={(values, { setSubmitting }) => {
                 setSubmitting(true)
                 setTimeout(() => {
@@ -88,7 +101,7 @@ const Newsletter = ({
                                 placeholder="Your Travel Journey Starts Here"
                                 component={Input}
                                 prefix={
-                                    <HiOutlineUserCircle className="text-xl" />
+                                    <HiPencilAlt className="text-xl text-green-400" />
                                 }
                                 />
                             </FormRow>
@@ -101,7 +114,7 @@ const Newsletter = ({
                                 placeholder="Sign up and we`'ll send the best deals to you"
                                 component={Input}
                                 prefix={
-                                    <HiOutlineUserCircle className="text-xl" />
+                                    <HiOutlinePencilAlt className="text-xl text-black" />
                                 }
                                 />
                             </FormRow>
@@ -118,7 +131,7 @@ const Newsletter = ({
                                 placeholder="Your Email"
                                 component={Input}
                                 prefix={
-                                    <HiOutlineUserCircle className="text-xl" />
+                                    <FcAddColumn className="text-xl" />
                                 }
                                 />
                             </FormRow>
@@ -131,25 +144,26 @@ const Newsletter = ({
                                 placeholder="Subscribe"
                                 component={Input}
                                 prefix={
-                                    <HiOutlineUserCircle className="text-xl" />
+                                    <HiOutlinePencil className="text-xl text-red-400" />
                                 }
                                 />
                             </FormRow>
                             <div className="mt-4 ltr:text-right">
-                                <Button
-                                    className="ltr:mr-2 rtl:ml-2"
-                                    type="button"
-                                    onClick={() => resetForm()}
-                                >
-                                    Reset
-                                </Button>
-                                <Button
-                                    variant="solid"
-                                    loading={isSubmitting}
-                                    type="submit"
-                                >
-                                    {isSubmitting ? 'Updating' : 'Save'}
-                                </Button>
+                                    <Button
+                                        className="ltr:mr-2 rtl:ml-2"
+                                        type="button"
+                                        onClick={() => resetForm()}
+                                    >
+                                        Reset
+                                    </Button>
+                                    <Button
+                                        variant="solid"
+                                        loading={isSubmitting}
+                                        type="submit"
+                                    >
+                                        {isSubmitting ? "Updating" : "Edit"}
+                                    </Button>
+                
                             </div>
                         </FormContainer>
                     </Form>

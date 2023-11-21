@@ -1,104 +1,46 @@
-import * as Yup from 'yup'
+import * as yup from 'yup'
 
 import { Avatar, Upload } from '@/components/ui'
+import { FcAddImage, FcAdvance } from 'react-icons/fc'
 import { Field, Form, Formik } from 'formik'
 import type { FieldInputProps, FieldProps, FormikProps } from 'formik'
+import { HiPencil, HiPencilAlt } from 'react-icons/hi'
+import { fetchBlockGuide, putBlockGuide, useAppDispatch } from './store'
 
 import Button from '@/components/ui/Button'
-import { FcAddImage } from 'react-icons/fc'
 import { FormContainer } from '@/components/ui/Form'
 import FormDesription from '../common/FormDescription'
 import FormRow from '../common/FormRow'
 import Input from '@/components/ui/Input'
 import Notification from '@/components/ui/Notification'
 import toast from '@/components/ui/toast'
-import { z } from 'zod';
-
-const blockContentSchema = z.object({
-    icon: z.string(),
-    title: z.string(),
-    text: z.string(),
-    delayAnimation: z.string(),
-});
-
-const validationSchema = z.object({
-    blockContent1: z.array(blockContentSchema),
-    blockContent2: blockContentSchema,
-    blockContent3: blockContentSchema,
-});
-
 
 export type BlockGuideModel = {
-    blockContent1: {
-        icon: string;
-        title: string;
-        text: string;
-        delayAnimation: string;
-    }[],
-    blockContent2: {
-        icon: string;
-        title: string;
-        text: string;
-        delayAnimation: string;
-    },
-    blockContent3: {
-        icon: string;
-        title: string;
-        text: string;
-        delayAnimation: string;
-    },
+    icon: string;
+    title: string;
+    text: string;
+    delayAnimation: string;
 }
-
 
 type props = {
     data?: BlockGuideModel
 }
 
-// const validationSchema = Yup.object().shape({
-//     blockContent1: Yup.array().of(
-//         Yup.object().shape({
-//             icon: Yup.string().required('Icon is required'),
-//             title: Yup.string().required('Title is required'),
-//             text: Yup.string().required('Text is required'),
-//             delayAnimation: Yup.string().required('Delay Animation is required'),
-//         })
-//     ),
-//     blockContent2: Yup.object().shape({
-//         icon: Yup.string().required('Icon is required'),
-//         title: Yup.string().required('Title is required'),
-//         text: Yup.string().required('Text is required'),
-//         delayAnimation: Yup.string().required('Delay Animation is required'),
-//     }),
-//     blockContent3: Yup.object().shape({
-//         icon: Yup.string().required('Icon is required'),
-//         title: Yup.string().required('Title is required'),
-//         text: Yup.string().required('Text is required'),
-//         delayAnimation: Yup.string().required('Delay Animation is required'),
-//     }),
-// });
+const blockGuideSchema = yup.object().shape({    
+    icon: yup.string().required('Icon is required'),
+    title: yup.string().required('Title is required'),
+    text: yup.string().required('Text is required'),
+    delayAnimation: yup.string().required('Delay Animation is required'),
+});
 
-const BlockGuide = ({
-    data = {
-        blockContent1: [{
-            icon: "",
-            title: "",
-            text: "",
-            delayAnimation: "",
-        }],
-        blockContent2: {
-            icon: "",
-            title: "",
-            text: "",
-            delayAnimation: "",
-        },
-        blockContent3: {
-            icon: "",
-            title: "",
-            text: "",
-            delayAnimation: "",
-        },
-    },
-}: props) => {
+const BlockGuide = ({ blockGuideData }: props) => {
+    const dispatch = useAppDispatch();
+    const initialData = {
+        icon: blockGuideData.icon,
+        title: blockGuideData.title,
+        text: blockGuideData.text,
+        delayAnimation: blockGuideData.delayAnimation,
+    }
     const onSetFormFile = (
         form: FormikProps<BlockGuideModel>,
         field: FieldInputProps<BlockGuideModel>,
@@ -107,23 +49,33 @@ const BlockGuide = ({
         form.setFieldValue(field.name, URL.createObjectURL(file[0]))
     }
 
-
-    const onFormSubmit = (
+    const onFormSubmit = async (
         values: BlockGuideModel,
         setSubmitting: (isSubmitting: boolean) => void
     ) => {
-        console.log('values', values)
-        toast.push(<Notification title={'BlockGuide data updated'} type="success" />, {
-            placement: 'top-center',
-        })
+        try {
+            setSubmitting(true);
+            const response = await dispatch(putBlockGuide({ ...values, _id: blockGuideData._id }));
+            if(response.meta.requestStatus == 'fulfilled'){
+                dispatch(fetchBlockGuide())
+                toast.push(<Notification title={'Block Guide data updated'} type="success" />, {
+                    placement: 'top-center',
+                })
+            }
+        } catch (error) {
+            console.error("Error posting Extras:", error);
+            toast.push(<Notification title={'Error please try  again later.'} type="danger" />, {
+                placement: 'top-center',
+            })
+        }
         setSubmitting(false)
     }
 
     return (
         <Formik
             enableReinitialize
-            initialValues={data}
-            validationSchema={validationSchema}
+            initialValues={initialData}
+            validationSchema={blockGuideSchema}
             onSubmit={(values, { setSubmitting }) => {
                 setSubmitting(true)
                 setTimeout(() => {
@@ -142,11 +94,11 @@ const BlockGuide = ({
                             />
 
                            <FormRow
-                                name="blockContent1"
+                                name="icon"
                                 label="Icon"
                                 {...validatorProps}
                             >
-                                <Field name="blockContent1.icon">
+                                <Field name="icon">
                                     {({ field, form }: FieldProps) => {
                                         const avatarProps = field.value
                                             ? { src: field.value }
@@ -184,66 +136,44 @@ const BlockGuide = ({
                                 </Field>
                             </FormRow>
 
-                            {/* <FormRow name="blockContent1.title" label="Title" {...validatorProps}>
+                            <FormRow name="title" label="Title" {...validatorProps}>
                                 <Field
                                 type="text"
                                 autoComplete="off"
                                 name="title"
                                 placeholder="Best Price Guarantee"
                                 component={Input}
+                                prefix={
+                                    <HiPencilAlt className='text-xl text-black' />
+                                }
                                 />
                             </FormRow>
 
-                            <FormRow name="blockContent1.text" label="Text" {...validatorProps}>
+                            <FormRow name="text" label="Text" {...validatorProps}>
                                 <Field
                                 type="text"
                                 autoComplete="off"
                                 name="text"
                                 placeholder="Experience the best rates, always."
                                 component={Input}
+                                prefix={
+                                    <HiPencil className='text-xl text-gray-400' />
+                                }
                                 />
                             </FormRow>
 
-                            <FormRow name="blockContent1.delayAnimation" label="Delay Animation" {...validatorProps}>
+                            <FormRow name="delayAnimation" label="Delay Animation" {...validatorProps}>
                                 <Field
                                 type="text"
                                 autoComplete="off"
                                 name="delayAnimation"
                                 placeholder="Animation Delay (100,200,300,400)"
                                 component={Input}
+                                prefix={
+                                    <FcAdvance className='text-xl' />
+                                }
                                 />
-                            </FormRow> */}
-
-        <FormRow name="blockContent1" label="Title" {...validatorProps}>
-            <Field
-                type="text"
-                autoComplete="off"
-                name="blockContent1.title"  // Update the name to match your structure
-                placeholder="Best Price Guarantee"
-                component={Input}
-            />
-        </FormRow>
-
-        <FormRow name="blockContent1" label="Text" {...validatorProps}>
-            <Field
-                type="text"
-                autoComplete="off"
-                name="blockContent1.text"  // Update the name to match your structure
-                placeholder="Experience the best rates, always."
-                component={Input}
-            />
-        </FormRow>
-
-        <FormRow name="blockContent1" label="Delay Animation" {...validatorProps}>
-            <Field
-                type="text"
-                autoComplete="off"
-                name="blockContent1.delayAnimation"  // Update the name to match your structure
-                placeholder="Animation Delay (100,200,300,400)"
-                component={Input}
-            />
-        </FormRow>
-
+                            </FormRow>
 
                            
                             <div className="mt-4 ltr:text-right">
@@ -259,7 +189,7 @@ const BlockGuide = ({
                                     loading={isSubmitting}
                                     type="submit"
                                 >
-                                    {isSubmitting ? 'Updating' : 'Save'}
+                                    {isSubmitting ? 'Updating' : 'Edit'}
                                 </Button>
                             </div>
                         </FormContainer>

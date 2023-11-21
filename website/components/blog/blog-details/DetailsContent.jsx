@@ -1,13 +1,21 @@
+import Link from "next/link";
 import Social2 from "../../common/social/Social2";
 import blogsData from "../../../data/blogs";
-import Link from "next/link";
 
 const DetailsContent = ({blog}) => {
   return (
     <>
-      <h3 className="text-20 fw-500">{blog.title}</h3>
-      <div className="text-15 mt-20">
+      <div className="text-15">
         {blog.details}
+      </div>
+      <div className="text-15 mt-20">
+        {blog.description1}
+      </div>
+      <div className="text-15 mt-20">
+        {blog.description2}
+      </div>
+      <div className="text-15 mt-20">
+        {blog.description3}
       </div>
 
       <div className="row y-gap-20 justify-between pt-30">
@@ -19,7 +27,6 @@ const DetailsContent = ({blog}) => {
             </div>
           </div>
         </div>
-        {/* End social share */}
 
         <div className="col-auto">
           <div className="row x-gap-10 y-gap-10">
@@ -35,7 +42,6 @@ const DetailsContent = ({blog}) => {
             ))}
           </div>
         </div>
-        {/* End tags */}
       </div>
     </>
   );

@@ -19,14 +19,14 @@ module.exports = [
       { name: "Sitemap", routerPath: "/sitemap.xml" },
     ],
   },
-  // {
-  //   id: 3,
-  //   title: "Other Services",
-  //   menuList: [
-  //     { name: "Activity Finder", routerPath: "/" },
-  //     { name: "Tour List", routerPath: "/" },
-  //     { name: "Holiday Rental", routerPath: "/" },
-  //     { name: "Travel Agents", routerPath: "/" },
-  //   ],
-  // },
+  {
+    id: 3,
+    title: "Other Services",
+    menuList: [
+      { name: "Activity Finder", routerPath: "/" },
+      { name: "Tour List", routerPath: "/" },
+      { name: "Holiday Rental", routerPath: "/" },
+      { name: "Travel Agents", routerPath: "/" },
+    ],
+  }
 ];

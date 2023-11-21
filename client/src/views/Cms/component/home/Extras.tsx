@@ -1,98 +1,118 @@
 import * as Yup from 'yup'
 
-import { FcPlus, FcTreeStructure } from 'react-icons/fc'
-import { Field, FieldArray, Form, Formik } from 'formik'
-import type { FieldInputProps, FormikProps } from 'formik'
-import { FormContainer, FormItem } from '@/components/ui/Form'
-import { HiOutlineGlobeAlt, HiOutlineMinusCircle, HiOutlineUserCircle } from 'react-icons/hi'
+import { AdaptableCard, RichTextEditor } from '@/components/shared'
+import { Avatar, Upload } from '@/components/ui'
+import { FcAdvance, FcBusinessman, FcRating } from 'react-icons/fc'
+import { Field, Form, Formik } from 'formik'
+import type { FieldInputProps, FieldProps, FormikProps } from 'formik'
+import { HiOutlineGlobeAlt, HiPencil, HiPencilAlt, HiPhotograph } from 'react-icons/hi'
+import { useAppDispatch } from '@/store'
+import { editExtras, fetchHome } from './store'
 
 import Button from '@/components/ui/Button'
+import { FormContainer } from '@/components/ui/Form'
 import FormDesription from '../common/FormDescription'
 import FormRow from '../common/FormRow'
 import Input from '@/components/ui/Input'
 import Notification from '@/components/ui/Notification'
 import toast from '@/components/ui/toast'
 
-export type HomeFormModel = {
-    adBanner: {
-        title: string;
-        image: string;
-        meta: string;
-        routerPath: string;
-        delayAnimation: string;
-      };
-      testimonialRating: {
-        heading: string;
-        description: string;
-        customers: {
-          number: string;
-          text: string;
-        };
-        rating: {
-          number: string;
-          text: string;
-        };
-      };
-}
 
+export type ExtrasForm = {
+    _id?: string;
+    adBannerTitle: string;
+    adBannerImage: string;
+    adBannerMeta: string;
+    adBannerRouterPath: string;
+    adBannerDelayAnimation: string;
+    testimonialRatingHeading: string;
+    testimonialRatingDescription: string;
+    testimonialRatingCustomersNumber: string; 
+    testimonialRatingCustomersText: string; 
+    testimonialRatingRatingNumber: string;
+    testimonialRatingRatingText: string;
+};
 
 type props = {
-    data?: HomeFormModel
+    data?: ExtrasForm,
+    homeId?: string,
 }
 
-
 const validationSchema = Yup.object().shape({
-  
+    adBannerTitle: Yup.string().required('Ad Banner Title is required'),
+    adBannerImage: Yup.string().required('Ad Banner Image is required'),
+    adBannerMeta: Yup.string().required('Ad Banner Meta is required'),
+    adBannerRouterPath: Yup.string().required('Ad Banner Router Path is required'),
+    adBannerDelayAnimation: Yup.string()
+      .required('Ad Banner Delay Animation is required')
+      .matches(/^\d+$/, 'Ad Banner Delay Animation must be a number'),
+      
+    testimonialRatingHeading: Yup.string().required('Testimonial Rating Heading is required'),
+    testimonialRatingDescription: Yup.string().required('Testimonial Rating Description is required'),
+    testimonialRatingCustomersNumber: Yup.string()
+        .required('Testimonial Rating Customers Number is required')
+        .matches(/^\d+$/, 'Rating Customers Number must be a number'),
+    testimonialRatingCustomersText: Yup.string().required('Testimonial Rating Customers Text is required'),
+    testimonialRatingRatingNumber: Yup.string()
+        .required('Testimonial Rating Rating Number is required')
+        .matches(/^\d+(\.\d+)?$/, 'Rating Number must be a number'),
+    testimonialRatingRatingText: Yup.string().required('Testimonial Rating Rating Text is required'),
 });
 
+const Extras = ({ data, homeId }: props) => {
+    const initialData = {
+        adBannerTitle: data?.adBannerTitle || '',
+        adBannerImage: data?.adBannerImage || '',
+        adBannerMeta: data?.adBannerMeta || '',
+        adBannerRouterPath: data?.adBannerRouterPath || '',
+        adBannerDelayAnimation: data?.adBannerDelayAnimation || '',
 
-const Extras = ({
-    data = {
-        adBanner: {
-            title: "",
-            image: "",
-            meta: "",
-            routerPath: "",
-            delayAnimation: "",
-        },
-        testimonialRating: {
-          heading: "",
-          description: "",
-          customers: {
-            number: "",
-            text: "",
-          },
-          rating: {
-            number: "",
-            text: "",
-          },
-        },
-    }    
-}: props) => {
+        testimonialRatingHeading: data?.testimonialRatingHeading || '',
+        testimonialRatingDescription: data?.testimonialRatingDescription || '',
+        testimonialRatingCustomersNumber: data?.testimonialRatingCustomersNumber || '',
+        testimonialRatingCustomersText: data?.testimonialRatingCustomersText || '',
+        testimonialRatingRatingNumber: data?.testimonialRatingRatingNumber || '',
+        testimonialRatingRatingText: data?.testimonialRatingRatingText || '',
+    }
+    const dispatch = useAppDispatch();
+    
     const onSetFormFile = (
-        form: FormikProps<HomeFormModel>,
-        field: FieldInputProps<HomeFormModel>,
+        form: FormikProps<ExtrasForm>,
+        field: FieldInputProps<ExtrasForm>,
         file: File[]
     ) => {
         form.setFieldValue(field.name, URL.createObjectURL(file[0]))
     }
 
-    const onFormSubmit = (
-        values: HomeFormModel,
+    const onFormSubmit = async (
+        values: ExtrasForm,
         setSubmitting: (isSubmitting: boolean) => void
     ) => {
-        console.log('values', values)
-        toast.push(<Notification title={'Middle Section updated'} type="success" />, {
-            placement: 'top-center',
-        })
+        try {
+            setSubmitting(true);
+            const response = await dispatch(editExtras({ id: homeId , values: values }));
+            if(response.meta.requestStatus == 'fulfilled'){
+                dispatch(fetchHome())
+                toast.push(<Notification title={'Extras data updated'} type="success" />, {
+                    placement: 'top-center',
+                })
+            }
+        } catch (error) {
+            console.error("Error posting Extras:", error);
+            toast.push(<Notification title={'Error, try again later!'} type="danger" />, {
+                placement: 'top-center',
+            })
+        }
         setSubmitting(false)
     }
 
-
     return (
+        <AdaptableCard>
+        <div className="max-w-[800px] mx-auto">
+            
         <Formik
             enableReinitialize
-            initialValues={data}
+            initialValues={initialData}
             validationSchema={validationSchema}
             onSubmit={(values, { setSubmitting }) => {
                 setSubmitting(true)
@@ -107,116 +127,236 @@ const Extras = ({
                     <Form>
                         <FormContainer>
                             <FormDesription
-                                title="Home Page"
+                                title="Add Banner"
                                 desc="Basic info for your home page"
                             />
                            
                            <FormRow
-                                name="adBanner"
-                                label="Ad Banner Title"
+                                name="adBannerTitle"
+                                label="Title"
                                 {...validatorProps}
                                 border={false}
                             >
                             <Field
                                 type="text"
                                 autoComplete="off"
-                                name="adBanner.title"
-                                placeholder="Ad Banner Title"
+                                name="adBannerTitle"
+                                placeholder="Up to 70% Discount!"
                                 component={Input}
+                                prefix={
+                                    <HiPencilAlt className='text-xl text-black' />
+                                }
                             />
                             </FormRow>
+                           
+
                             <FormRow
-                                name="adBanner"
-                                label="Ad Banner Image"
+                                name="adBannerImage"
+                                label="Image"
+                                {...validatorProps}
+                                border={false}
+                            >
+                                <Field name="adBannerImage">
+                                    {({ field, form }: FieldProps) => {
+                                        const avatarProps = field.value
+                                            ? { src: field.value }
+                                            : {}
+                                        return (
+                                            <Upload
+                                                className="cursor-pointer"
+                                                showList={false}
+                                                uploadLimit={1}
+                                                onChange={(files) =>
+                                                    onSetFormFile(
+                                                        form,
+                                                        field,
+                                                        files
+                                                    )
+                                                }
+                                                onFileRemove={(files) =>
+                                                    onSetFormFile(
+                                                        form,
+                                                        field,
+                                                        files
+                                                    )
+                                                }
+                                            >
+                                                <Avatar
+                                                    className="border-2 border-white dark:border-gray-800 shadow-lg"
+                                                    size={100}
+                                                    shape="square"
+                                                    icon={<HiPhotograph />}
+                                                    {...avatarProps}
+                                                />
+                                            </Upload>
+                                        )
+                                    }}
+                                </Field>
+                            </FormRow>
+
+                            <FormRow
+                                name="adBannerMeta"
+                                label="Meta"
                                 {...validatorProps}
                                 border={false}
                             >
                             <Field
                                 type="text"
                                 autoComplete="off"
-                                name="adBanner.image"
-                                placeholder="Ad Banner Image"
+                                name="adBannerMeta"
+                                placeholder="Enjoy Summer Deals"
                                 component={Input}
+                                prefix={
+                                    <HiPencil className='text-xl text-gray-400' />
+                                }
                             />
                             </FormRow>
 
-                            
                             <FormRow
-                            name="testimonialRating"
-                            label="Testimonial Rating Heading"
-                            {...validatorProps}
+                                name="adBannerRouterPath"
+                                label="RouterPath"
+                                {...validatorProps}
+                                border={false}
                             >
                             <Field
                                 type="text"
                                 autoComplete="off"
-                                name="testimonialRating.heading"
-                                placeholder="Testimonial Rating Heading"
+                                name="adBannerRouterPath"
+                                placeholder="Ad Banner RouterPath"
                                 component={Input}
+                                prefix={
+                                    <HiOutlineGlobeAlt className='text-xl text-blue-400' />
+                                }
                             />
                             </FormRow>
+
                             <FormRow
-                            name="testimonialRating"
-                            label="Testimonial Rating Description"
-                            {...validatorProps}
+                                name="adBannerDelayAnimation"
+                                label="Delay Animation"
+                                {...validatorProps}
                             >
                             <Field
                                 type="text"
                                 autoComplete="off"
-                                name="testimonialRating.description"
-                                placeholder="Testimonial Rating Description"
+                                name="adBannerDelayAnimation"
+                                placeholder="Ad Banner Animation"
                                 component={Input}
+                                prefix={
+                                    <FcAdvance className='text-xl' />
+                                }
                             />
                             </FormRow>
+
+
+                            <FormDesription
+                                title="Testimonial Rating"
+                                desc="Basic info for your home page"
+                                className='mt-2'
+                            />
                             <FormRow
-                                name="testimonialRating"
+                            name="testimonialRatingHeading"
+                            label="Rating Heading"
+                            {...validatorProps}
+                            border={false}
+                            >
+                            <Field
+                                type="text"
+                                autoComplete="off"
+                                name="testimonialRatingHeading"
+                                placeholder="What our customers are saying us?"
+                                component={Input}
+                                prefix={
+                                    <HiPencilAlt className='text-xl text-black' />
+                                }
+                            />
+                            </FormRow>
+                          
+
+                            <FormRow
+                                name="testimonialRatingDescription"
+                                label="Description"
+                                {...validatorProps}
+                                border={false}
+                            >
+                                <Field name="testimonialRatingDescription">
+                                    {({ field, form }: FieldProps) => (
+                                        <RichTextEditor
+                                            value={field.value}
+                                            onChange={(val) =>
+                                                form.setFieldValue(field.name, val)
+                                            }
+                                        />
+                                    )}
+                                </Field>
+                            </FormRow>
+
+
+                            <FormRow
+                                name="testimonialRatingCustomersNumber"
                                 label="Number of Customers"
                             {...validatorProps}
+                            border={false}
                             >
                             <Field
                                 type="text"
                                 autoComplete="off"
-                                name="testimonialRating.customers.number"
-                                placeholder="Number of Customers"
+                                name="testimonialRatingCustomersNumber"
+                                placeholder="1000+"
                                 component={Input}
+                                prefix={
+                                    <FcBusinessman className="text-xl" />
+                                }
                             />
                             </FormRow>
                             <FormRow
-                                name="testimonialRating"
+                                name="testimonialRatingCustomersText"
                                 label="Customers Text"
                             {...validatorProps}
+                            border={false}
                             >
                             <Field
                                 type="text"
                                 autoComplete="off"
-                                name="testimonialRating.customers.text"
-                                placeholder="Customers Text"
+                                name="testimonialRatingCustomersText"
+                                placeholder="Happy Customers"
                                 component={Input}
+                                prefix={
+                                    <HiPencil className="text-xl" />
+                                }
                             />
                             </FormRow>
                             <FormRow
-                                name="testimonialRating"
+                                name="testimonialRatingRatingNumber"
                                 label="Rating Number"
                             {...validatorProps}
+                            border={false}
                             >
                             <Field
                                 type="text"
                                 autoComplete="off"
-                                name="testimonialRating.rating.number"
-                                placeholder="Rating Number"
+                                name="testimonialRatingRatingNumber"
+                                placeholder="4.9"
                                 component={Input}
+                                prefix={
+                                    <FcRating className='text-xl' />
+                                }
                             />
                             </FormRow>
                             <FormRow
-                                name="testimonialRating"
+                                name="testimonialRatingRatingText"
                                 label="Rating Text"
                             {...validatorProps}
+                            border={false}
                             >
                             <Field
                                 type="text"
                                 autoComplete="off"
-                                name="testimonialRating.rating.text"
-                                placeholder="Rating Text"
+                                name="testimonialRatingRatingText"
+                                placeholder="Overall rating"
                                 component={Input}
+                                prefix={
+                                    <HiPencil className="text-xl text-black" />
+                                }
                             />
                             </FormRow>
                             
@@ -233,7 +373,7 @@ const Extras = ({
                                     loading={isSubmitting}
                                     type="submit"
                                 >
-                                    {isSubmitting ? 'Updating' : 'Save'}
+                                    {isSubmitting ? 'Updating' : 'Edit'}
                                 </Button>
                             </div>
                         </FormContainer>
@@ -241,6 +381,9 @@ const Extras = ({
                 )
             }}
         </Formik>
+        
+    </div>
+    </AdaptableCard>
     )
 }
 

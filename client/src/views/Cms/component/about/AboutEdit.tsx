@@ -1,14 +1,18 @@
-import { Suspense, lazy, useState } from 'react'
+import { Suspense, lazy, useEffect, useState } from 'react'
+import reducer, { fetchAbout, useAppDispatch, useAppSelector } from './store'
 
 import AdaptableCard from '@/components/shared/AdaptableCard'
 import Container from '@/components/shared/Container'
+import { SLICE_NAME } from "./store/aboutSlice"
 import Tabs from '@/components/ui/Tabs'
+import { injectReducer } from '@/store'
 
 const About = lazy(() => import('./AboutContent'))
-const Seo = lazy(() => import('../common/Seo'))
+const Seo = lazy(() => import('./Seo'))
 
 const { TabNav, TabList } = Tabs
 
+injectReducer(SLICE_NAME,reducer)
 
 const settingsMenu: Record<
     string,
@@ -24,7 +28,11 @@ const settingsMenu: Record<
 
 const AboutEdit = () => {
     const [currentTab, setCurrentTab] = useState('about')
-
+    const dispatch = useAppDispatch();
+    const data = useAppSelector(state => state.about.data.aboutData)
+    useEffect(() => {
+        dispatch(fetchAbout())
+    },[dispatch])
 
     const onTabChange = (val: string) => {
         setCurrentTab(val)
@@ -46,10 +54,10 @@ const AboutEdit = () => {
                 <div className="px-4 py-6">
                     <Suspense fallback={<></>}>
                         {currentTab === 'about' && (
-                            <About  />
+                            <About data={data} />
                         )}
                         {currentTab === 'seo' && (
-                            <Seo />
+                            <Seo data={data.seo} aboutId={data._id} />
                         )}
                     </Suspense>
                 </div>

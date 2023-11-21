@@ -7,7 +7,6 @@ const counters = [
   { name: "Children", defaultValue: 0 },
   { name: "Infant", defaultValue: 0 },
   { name: "Rooms", defaultValue: 0 },
-  
 ];
 
 const Counter = ({ name, defaultValue, onCounterChange }) => {

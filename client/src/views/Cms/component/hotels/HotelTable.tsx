@@ -4,17 +4,23 @@ import type {
     OnSortParam,
 } from '@/components/shared/DataTable'
 import { HiOutlinePencil, HiOutlineTrash } from 'react-icons/hi'
-import { useAppDispatch } from '../../store'
-import { useMemo, useRef } from 'react'
+import reducer, { fetchHotels, useAppDispatch, useAppSelector } from './store'
+import { useEffect, useMemo, useRef } from 'react'
+
 import Avatar from '@/components/ui/Avatar'
 import DataTable from '@/components/shared/DataTable'
 import { FiPackage } from 'react-icons/fi'
+import { SLICE_NAME, deleteHotel } from "./store/hotelSlice"
 import cloneDeep from 'lodash/cloneDeep'
+import { injectReducer } from '@/store'
 import { useNavigate } from 'react-router-dom'
 import useThemeClass from '@/utils/hooks/useThemeClass'
+import { Notification, toast } from '@/components/ui'
+
+injectReducer(SLICE_NAME,reducer)
 
 type Hotel = {
-    id: number;
+    _id: number;
     tag: string;
     slideImg: string[];
     img: string;
@@ -32,14 +38,17 @@ type Hotel = {
 const ActionColumn = ({ row }: { row: Hotel }) => {
     const { textTheme } = useThemeClass()
     const navigate = useNavigate()
+    const dispatch = useAppDispatch();
 
     const onEdit = () => {
-        navigate(`/crm/Hotel/Hotel-new/${row.id}`)
+        navigate(`/cms/hotels/edit/${row._id}`)
     }
 
     const onDelete = () => {
-        // dispatch(toggleDeleteConfirmation(true))
-        // dispatch(setSelectedHotel(row.id))
+        dispatch(deleteHotel(row._id))
+        toast.push(<Notification title={'Successfully deleted Hotel.'} type="success" />, {
+            placement: 'top-center',
+        })
     }
 
     return (
@@ -78,39 +87,15 @@ const HotelColumn = ({ row }: { row: Hotel }) => {
 const HotelTable = () => {
     const tableRef = useRef<DataTableResetHandle>(null)
 
+    const dispatch = useAppDispatch();
+
+    const { hotelData: data, loading } = useAppSelector( (state) => state.hotel.data)
+    
+    useEffect(() => {
+        dispatch(fetchHotels())
+    },[data])
+    
     const tableData = {pageIndex: 1, pageSize: 10, sort: {order: '', key: ''}, query: '', total: 12}
-    const data = [
-        {
-            id: 1,
-            tag: "Breakfast Included",
-            slideImg: ["/img/hotels/metropolitan-taksim-hotel/1.jpg","/img/hotels/metropolitan-taksim-hotel/2.jpg","/img/hotels/metropolitan-taksim-hotel/3.jpg","/img/hotels/metropolitan-taksim-hotel/4.jpg","/img/hotels/metropolitan-taksim-hotel/5.jpg","/img/hotels/metropolitan-taksim-hotel/6.jpg","/img/hotels/metropolitan-taksim-hotel/7.jpg","/img/hotels/metropolitan-taksim-hotel/8.jpg"],
-            img: "/img/hotels/1.jpg",
-            param: "metropolitan-taksim-hotel",
-            title: "Metropolitan Taksim Hotel",
-            btnHref: "https://www.makemytrip.com/hotels-international/turkey/istanbul-hotels/metropolitan_hotels_taksim-details.html",
-            overview: "The Metropolitan Taksim Hotel, located in the centre of Istanbul, entices with its 4.7-star magnificence. The hotel has 3014 reviews and is well-known for its complimentary breakfast and first-rate service. It provides visitors with a haven of elegance with a hint of grandeur, complete with contemporary conveniences and roomy accommodations. Enjoy the city's breathtaking sights while getting to know Istanbul's vibrant culture. Due to its convenient proximity to the city's exciting attractions, the hotel is a favourite among discerning tourists.",
-            location: "Istanbul",
-            ratings: "4.7",
-            numberOfReviews: "3014",
-            delayAnimation: "100",
-            routePath: "/hotel/metropolitan-taksim-hotel"
-          },
-          {
-            id: 2,
-            tag: "",
-            slideImg: ["/img/hotels/marmara-taksim/1.jpg", "/img/hotels/marmara-taksim/2.jpg", "/img/hotels/marmara-taksim/3.jpg","/img/hotels/marmara-taksim/4.jpg","/img/hotels/marmara-taksim/5.jpg","/img/hotels/marmara-taksim/6.jpg","/img/hotels/marmara-taksim/7.jpg"],
-            img: "/img/hotels/2.jpg",
-            param: "marmara-taksim",
-            title: "Marmara Taksim",
-            btnHref: "https://www.makemytrip.com/hotels-international/turkey/istanbul-hotels/the_marmara_taksim_6608967321240337-details.html",
-            overview: "Istanbul's humming urban landscape is graced by the 4.8-star masterpiece Marmara Taksim. Customers gush about the hotel's lavish amenities and magnificent vistas in its impressive 2345 reviews. It offers a luxurious refuge to both pleasure and business travellers and is well located in the centre of the city. Each room's combination of modernity and comfort ensures a memorable stay. As the hotel places you in the centre of the action, discover Istanbul's beauties with ease.",
-            location: "Istanbul",
-            ratings: "4.8",
-            numberOfReviews: "2345",
-            delayAnimation: "200",
-            routePath: "/hotel/marmara-taksim"
-          },
-    ];
       
     const columns: ColumnDef<Hotel>[] = useMemo(
         () => [

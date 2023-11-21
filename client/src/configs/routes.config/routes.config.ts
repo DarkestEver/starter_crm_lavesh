@@ -11,13 +11,6 @@ export const protectedRoutes = [
         component: lazy(() => import('@/views/Home')),
         authority: [],
     },
-    /** Example purpose only, please remove */
-    {
-        key: 'blog',
-        path: '/blog',
-        component: lazy(() => import('@/views/Blog/Blog')),
-        authority: [],
-    },
     {
         key: 'cms',
         path: '/cms',
@@ -32,7 +25,13 @@ export const protectedRoutes = [
     },
     {
         key: 'destination',
-        path: '/cms/destinations/edit',
+        path: '/cms/destinations/save',
+        component: lazy(() => import('@/views/Cms/component/destinations/DestinationEdit')),
+        authority: [],
+    },
+    {
+        key: 'destination',
+        path: '/cms/destinations/edit/:id',
         component: lazy(() => import('@/views/Cms/component/destinations/DestinationEdit')),
         authority: [],
     },
@@ -50,7 +49,13 @@ export const protectedRoutes = [
     },
     {
         key: 'testimonials',
-        path: '/cms/testimonials/edit',
+        path: '/cms/testimonials/edit/:id',
+        component: lazy(() => import('@/views/Cms/component/testimonials/TestimonialsEdit')),
+        authority: [],
+    },
+    {
+        key: 'testimonials',
+        path: '/cms/testimonials/save',
         component: lazy(() => import('@/views/Cms/component/testimonials/TestimonialsEdit')),
         authority: [],
     },
@@ -62,7 +67,13 @@ export const protectedRoutes = [
     },
     {
         key: 'blogs',
-        path: '/cms/blogs/edit',
+        path: '/cms/blogs/edit/:id',
+        component: lazy(() => import('@/views/Cms/component/blogs/BlogEdit')),
+        authority: [],
+    },
+    {
+        key: 'blogs',
+        path: '/cms/blogs/save',
         component: lazy(() => import('@/views/Cms/component/blogs/BlogEdit')),
         authority: [],
     },
@@ -98,7 +109,13 @@ export const protectedRoutes = [
     },
     {
         key: 'hotels',
-        path: '/cms/hotels/edit',
+        path: '/cms/hotels/edit/:id',
+        component: lazy(() => import('@/views/Cms/component/hotels/HotelEdit')),
+        authority: [],
+    },
+    {
+        key: 'hotels',
+        path: '/cms/hotels/save',
         component: lazy(() => import('@/views/Cms/component/hotels/HotelEdit')),
         authority: [],
     },

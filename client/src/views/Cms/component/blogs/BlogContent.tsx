@@ -1,20 +1,26 @@
-import * as Yup from 'yup'
+import * as yup from 'yup'
 
 import { Avatar, DatePicker, Select, Upload } from '@/components/ui'
-import { Field, Form, Formik } from 'formik'
+import { ErrorMessage, Field, Form, Formik } from 'formik'
 import type { FieldInputProps, FieldProps, FormikProps } from 'formik'
 import { FormContainer, FormItem } from '@/components/ui/Form'
-import { HiOutlineUser, HiOutlineUserCircle, HiPhotograph } from 'react-icons/hi'
+import { HiOutlineCalendar, HiOutlineGlobeAlt, HiPencilAlt, HiPhotograph } from 'react-icons/hi'
+import reducer, { deleteBlog, fetchBlogById, postBlog, putBlog, useAppDispatch } from './store'
+import { useEffect, useState } from 'react'
 
 import AdaptableCard from '@/components/shared/AdaptableCard'
 import Button from '@/components/ui/Button'
 import CreatableSelect from 'react-select/creatable'
+import { FcAdvance } from 'react-icons/fc'
 import Input from '@/components/ui/Input'
 import Notification from '@/components/ui/Notification'
 import ReactHtmlParser from 'html-react-parser'
 import { RichTextEditor } from '@/components/shared'
+import { injectReducer } from '@/store'
 import toast from '@/components/ui/toast'
-import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
+injectReducer('blog',reducer)
 
 export type BlogFormModel = {
     img: string;
@@ -23,37 +29,55 @@ export type BlogFormModel = {
     date: string;
     delayAnimation: string;
     details: string;
-    tag: string;
+    tag: {
+        label: string
+        value: string
+    }[];
 }
-
 type props = {
     data?: BlogFormModel
 }
 
-const validationSchema = Yup.object().shape({
-    img: Yup.string().required('Image URL is required'),
-    title: Yup.string().required('Title is required'),
-    param: Yup.string().required('Parameter is required'),
-    date: Yup.string().required('Date is required'),
-    delayAnimation: Yup.string()
+const blogSchema = yup.object().shape({
+    img: yup.string().required('Image is required'),
+    title: yup.string().required('Title is required'),
+    param: yup.string().required('Parameter is required'),
+    date: yup.string().required('Date is required'),
+    delayAnimation: yup.string()
       .required('Delay Animation is required')
       .matches(/^(100|200|300|400)$/, 'Invalid Delay Animation'),
-    details: Yup.string().required('Details is required'),
-    // tag: Yup.string(),
+    details: yup.string().required('Blog Content is required'),
+    tag: yup.array().required('Tag is required'),
   });
 
-
-const BlogContent = ({
-    data = {
+const BlogContent = ({ preview }: props) => {
+    const initialData = {
         img: '',
         title: '',
         param: '',
         date: '',
         delayAnimation: '',
         details: '',
-        tag: '',
-    },
-}: props) => {
+        tag: [],
+    };
+
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const [ data , setData ] = useState(initialData)
+
+    const id = location.pathname.split('/').pop();
+    useEffect(() => {
+        const fetch = async () => {
+            const res = await dispatch(fetchBlogById(id))
+            let blog = res.payload;
+            if(blog){
+                setData(blog)
+            }
+        }
+        fetch()
+    },[dispatch, id])
+    
+
     const onSetFormFile = (
         form: FormikProps<BlogFormModel>,
         field: FieldInputProps<BlogFormModel>,
@@ -62,25 +86,46 @@ const BlogContent = ({
         form.setFieldValue(field.name, URL.createObjectURL(file[0]))
     }
 
-    const onFormSubmit = (
+    const onFormSubmit = async (
         values: BlogFormModel,
         setSubmitting: (isSubmitting: boolean) => void,
         resetForm: any
     ) => {
-        console.log('values', values)
-        toast.push(<Notification title={'Blog updated'} type="success" />, {
-            placement: 'top-center',
-        })
-        resetForm()
+        try {
+            setSubmitting(true);
+            let response;
+            preview === "save" ?
+            response = await dispatch(postBlog(values)) 
+            : response = await dispatch(putBlog({ id: id, values: values }))
+
+            preview === "save" && resetForm();
+
+            if(response.meta.requestStatus == 'fulfilled'){
+                toast.push(<Notification title={'Blog updated'} type="success" />, {
+                    placement: 'top-center',
+                })
+            }
+          } catch (error) {
+              console.error("Error posting Extras:", error);
+              toast.push(<Notification title={'Error! try again later.'} type="danger" />, {
+                placement: 'top-center',
+            })
+          }
         setSubmitting(false)
     }
     const [ mode , setMode ] = useState('edit');
 
     const onModeChange = (mode: string) => {
-        // dispatch(setMode(mode))
         setMode(mode);
     }
-    
+
+    const onDelete = async () => {
+        dispatch(deleteBlog(id))
+        toast.push(<Notification title={'Successfully deleted blog.'} type="success" />, {
+            placement: 'top-center',
+        })
+        navigate('/cms/blogs')
+    }
 
     return (
         <AdaptableCard>
@@ -89,7 +134,7 @@ const BlogContent = ({
         <Formik
             enableReinitialize
             initialValues={data}
-            validationSchema={validationSchema}
+            validationSchema={blogSchema}
             onSubmit={(values, { setSubmitting,resetForm }) => {
                 setSubmitting(true);
                 setTimeout(() => {
@@ -98,13 +143,11 @@ const BlogContent = ({
             }}
             >
             {({ values, touched, errors, isSubmitting, resetForm }) => {
-                const validatorProps = { touched, errors };
                 return (
                     <Form>
                     <div className="flex justify-between items-center mb-4">
                         <h3>
                             {mode === 'edit' && <span>Edit Article</span>}
-                            {/* {mode === 'add' && <span>Add Article</span>} */}
                             {mode === 'preview' && <span>Preview Article</span>}
                         </h3>
                         {mode === 'preview' ? (
@@ -140,39 +183,52 @@ const BlogContent = ({
 
                     <FormContainer>
 
-                    <FormItem label="Title" {...validatorProps}>
+                    <FormItem 
+                        label="Title"
+                        invalid={(errors.title && touched.title) as boolean}
+                        errorMessage={errors.title}
+                    >
                         <Field
                             type="text"
                             autoComplete="off"
                             name="title"
                             placeholder="Title"
                             component={Input}
+                            prefix={
+                                <HiPencilAlt className='text-xl text-black' />
+                            }
                         />
                     </FormItem>
 
                     <FormItem
-                        label="Tags"
-                        {...validatorProps}
+                        label="Tag"
+                        invalid={
+                            (errors.tag && touched.tag) as unknown as boolean
+                        }
+                        errorMessage={errors.tag as string}
                     >
                         <Field name="tag">
                             {({ field, form }: FieldProps) => (
-                                <Select
-                                    isMulti
-                                    componentAs={CreatableSelect}
-                                    field={field}
-                                    form={form}
-                                    value={values.tag}
-                                    onChange={(option) =>
-                                        form.setFieldValue(field.name, option)
-                                    }
-                                />
+                            <Select
+                                isMulti
+                                componentAs={CreatableSelect}
+                                field={field}
+                                form={form}
+                                value={values.tag}
+                                onChange={(option) =>
+                                    form.setFieldValue(field.name, option)
+                                }
+                            />
                             )}
                         </Field>
+                        
                     </FormItem>
+
                     
                     <FormItem
                         label="Blog Content"
-                        {...validatorProps}
+                        invalid={(errors.details && touched.details) as boolean}
+                        errorMessage={errors.details}
                     >
                         <Field name="details">
                             {({ field, form }: FieldProps) => (
@@ -184,6 +240,7 @@ const BlogContent = ({
                                 />
                             )}
                         </Field>
+                        {/* <ErrorMessage name="details" /> */}
                     </FormItem>
 
                 <div className='flex justify-between flex-row'>
@@ -191,7 +248,8 @@ const BlogContent = ({
                   <div className='flex w-full sm:w-1/2'>
                     <FormItem
                         label="Thumbnail"
-                        {...validatorProps}
+                        invalid={(errors.img && touched.img) as boolean}
+                        errorMessage={errors.img}
                     >
                         <Field name="img">
                             {({ field, form }: FieldProps) => {
@@ -219,53 +277,94 @@ const BlogContent = ({
                                     </Upload>
                                 )
                             }}
-                        </Field>
+                        </Field> <br/>
+                        
                     </FormItem>
                   </div>
 
                 <div className='flex flex-col w-full sm:w-1/2'>
-                    <FormItem label="Slug" {...validatorProps}>
+                    <FormItem 
+                        label="Slug" 
+                        invalid={(errors.param && touched.param) as boolean}
+                        errorMessage={errors.param}
+                    >
                         <Field
                         type="text"
                         autoComplete="off"
                         name="param"
                         placeholder="/blogname"
                         component={Input}
+                        prefix={
+                            <HiOutlineGlobeAlt className='text-xl text-blue-400' />
+                        }
                         />
                     </FormItem>
 
-                    <FormItem label="Date" {...validatorProps}>
+                    <FormItem 
+                        label="Date" 
+                        invalid={(errors.date && touched.date) as boolean}
+                        errorMessage={errors.date}
+                    >
+                        <Field name="date">
+                            {({ field, form }: FieldProps) => (
+                                <DatePicker
+                                    value={field.value}
+                                    defaultValue={new Date()}
+                                    inputPrefix={<HiOutlineCalendar className="text-lg text-yellow-500" />}
+                                    inputSuffix={null}
+                                    onChange={(val) =>
+                                        form.setFieldValue(field.name, val)
+                                    }
+                                />
+                            )}
+                        </Field>
+                    </FormItem>
+
+                    <FormItem 
+                        label="Delay Animation"
+                        invalid={(errors.delayAnimation && touched.delayAnimation) as boolean}
+                        errorMessage={errors.delayAnimation}
+                    >
                         <Field
                             type="text"
                             autoComplete="off"
-                            name="date"
-                            placeholder="DD-MM-YY"
+                            name="delayAnimation"
+                            placeholder="Animation Delay (100,200,300,400)"
                             component={Input}
-                        />
-                    </FormItem>
-
-                    <FormItem label="Delay Animation" {...validatorProps}>
-                        <Field
-                        type="text"
-                        autoComplete="off"
-                        name="delayAnimation"
-                        placeholder="Animation Delay (100,200,300,400)"
-                        component={Input}
+                            prefix={
+                                <FcAdvance className='text-xl text-blue-400' />
+                            }
                         />
                     </FormItem>
                   </div>
                 </div>
                 
                     <div className="mt-4 ltr:text-right">
-                        <Button
-                            className="ltr:mr-2 rtl:ml-2"
-                            onClick={() => resetForm()}
-                        >
-                        Reset
-                        </Button>
-                        <Button variant="solid" type="submit" loading={isSubmitting}>
-                        {isSubmitting ? 'Updating' : 'Save'}
-                        </Button>
+                        { preview !== "save" ? <>
+                                <Button
+                                    className="ltr:mr-2 rtl:ml-2"
+                                    type="button"
+                                    onClick={onDelete}
+                                    >
+                                    Delete
+                                </Button>
+                                <Button
+                                    variant="solid"
+                                    loading={isSubmitting}
+                                    type="submit"
+                                    >
+                                    {isSubmitting ? 'Updating' : 'Edit'}
+                                </Button>
+                            </>
+                            :
+                                <Button
+                                    variant="solid"
+                                    loading={isSubmitting}
+                                    type="submit"
+                                    >
+                                    {isSubmitting ? 'Updating' : 'Save'}
+                                </Button>
+                        }
                     </div>
                     </FormContainer>
                     )}

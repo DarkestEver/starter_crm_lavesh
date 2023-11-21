@@ -6,7 +6,7 @@ import Container from '@/components/shared/Container'
 import Tabs from '@/components/ui/Tabs'
 
 const Blog = lazy(() => import('./BlogContent'))
-const Seo = lazy(() => import('../common/Seo'))
+const Seo = lazy(() => import('./Seo'))
 
 const { TabNav, TabList } = Tabs
 
@@ -23,6 +23,8 @@ const settingsMenu: Record<
 
 const BlogEdit = () => {
     const [currentTab, setCurrentTab] = useState('blog')
+    const preview = location.pathname.split('/').pop();
+
 
     const onTabChange = (val: string) => {
         setCurrentTab(val)
@@ -45,7 +47,7 @@ const BlogEdit = () => {
                 <div className="px-4 py-6">
                     <Suspense fallback={<></>}>
                         {currentTab === 'blog' && (
-                            <Blog  />
+                            <Blog preview={preview} />
                         )}
                         {currentTab === 'seo' && (
                             <Seo />

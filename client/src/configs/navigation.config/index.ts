@@ -17,17 +17,6 @@ const navigationConfig: NavigationTree[] = [
         authority: [],
         subMenu: [],
     },
-    /** Example purpose only, please remove */
-    {
-        key: 'blog',
-        path: '/blog',
-        title: 'Blog',
-        translateKey: 'nav.blog',
-        icon: 'blog',
-        type: NAV_ITEM_TYPE_ITEM,
-        authority: [],
-        subMenu: [],
-    },
     {
         key: 'cms',
         path: '/cms',

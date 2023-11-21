@@ -1,44 +1,13 @@
-import { Suspense, lazy, useState } from 'react'
+import { Suspense, lazy, useEffect, useState } from 'react'
+import reducer, { fetchFooterData, useAppDispatch, useAppSelector } from './store'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import AdaptableCard from '@/components/shared/AdaptableCard'
 import Container from '@/components/shared/Container'
 import Tabs from '@/components/ui/Tabs'
+import { injectReducer } from '@/store'
 
-// import { apiGetAccountSettingData } from '@/services/AccountServices'
-
-
-type AccountSetting = {
-    profile: {
-        name: string
-        email: string
-        title: string
-        avatar: string
-        timeZone: string
-        lang: string
-        syncData: boolean
-    }
-    loginHistory: {
-        type: string
-        deviceName: string
-        time: number
-        location: string
-    }[]
-    notification: {
-        news: string[]
-        accountActivity: string[]
-        signIn: string[]
-        reminders: string[]
-        mentioned: string[]
-        replies: string[]
-        taskUpdate: string[]
-        assigned: string[]
-        newProduct: string[]
-        newOrder: string[]
-    }
-}
-
-type GetAccountSettingData = AccountSetting
+injectReducer('footer',reducer)
 
 const Content1 = lazy(() => import('./Content1'))
 const Content2 = lazy(() => import('./Content2'))
@@ -48,13 +17,7 @@ const Content3 = lazy(() => import('./Content3'))
 
 const { TabNav, TabList } = Tabs
 
-const settingsMenu: Record<
-    string,
-    {
-        label: string
-        path: string
-    }
-> = {
+const settingsMenu: Record< string,{ label: string ,path: string }> = {
     content1: { label: 'Content1', path: 'content1' },
     content2: { label: 'Content2', path: 'content2' },
     content3: { label: 'Content3', path: 'content3' },
@@ -64,19 +27,16 @@ const settingsMenu: Record<
 
 const FooterEdit = () => {
     const [currentTab, setCurrentTab] = useState('content1')
-    const [data, setData] = useState<Partial<AccountSetting>>({})
 
-    const navigate = useNavigate()
+    const dispatch = useAppDispatch();
+    const footerData = useAppSelector(state => state.footer.data.footerData)
 
-    const location = useLocation()
-
-    const path = location.pathname.substring(
-        location.pathname.lastIndexOf('/') + 1
-    )
+    useEffect(() => {
+        dispatch(fetchFooterData())
+    },[])
 
     const onTabChange = (val: string) => {
         setCurrentTab(val)
-        // navigate(`/app/account/settings/${val}`)
     }
 
     return (
@@ -94,14 +54,14 @@ const FooterEdit = () => {
                 <div className="px-4 py-6">
                     <Suspense fallback={<></>}>
                         {currentTab === 'content1' && (
-                            <Content1  />
+                            <Content1 data={footerData[0]} />
                         )}
                         {currentTab === 'content2' && (
-                            <Content2 />
+                            <Content2 data={footerData[1]} />
                         )}
                         {currentTab === 'content3' && (
                             <Content3 
-                                // data={data.content3} 
+                                data={footerData[2]}
                             />
                         )}
                     </Suspense>

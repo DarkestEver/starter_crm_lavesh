@@ -1,15 +1,16 @@
-import * as Yup from 'yup'
+import * as yup from 'yup'
 
 import { BsFacebook, BsInstagram, BsLinkedin, BsTwitter } from 'react-icons/bs'
 import { FcAddressBook, FcCellPhone } from 'react-icons/fc'
 import { Field, Form, Formik } from 'formik'
-import type { FieldInputProps, FormikProps } from 'formik'
-import { HiOutlineAtSymbol, HiOutlineUserCircle } from 'react-icons/hi'
+import { fetchContact, putContact, useAppDispatch } from './store'
 
+import { AdaptableCard } from '@/components/shared'
 import Button from '@/components/ui/Button'
 import { FormContainer } from '@/components/ui/Form'
 import FormDesription from '../common/FormDescription'
 import FormRow from '../common/FormRow'
+import { HiOutlineAtSymbol } from 'react-icons/hi'
 import Input from '@/components/ui/Input'
 import Notification from '@/components/ui/Notification'
 import toast from '@/components/ui/toast'
@@ -18,70 +19,76 @@ export type ContactFormModel = {
     address: string;
     phone: string;
     email: string;
-    socialMediaLinks: {
-      facebook: string;
-      twitter: string;
-      instagram: string;
-      linkedin: string;
-    };
+    socialMediaLinksFacebook: string;
+    socialMediaLinksTwitter: string;
+    socialMediaLinksInstagram: string;
+    socialMediaLinksLinkedin: string;
 }
 
 type props = {
-    data?: ContactFormModel
+    daa?: ContactFormModel,
 }
 
-const validationSchema = Yup.object().shape({
-    address: Yup.string().required('Address is required'),
-    phone: Yup.number() .min(1000000000, 'Phone number must be exactly 10 numbers long')
+const contactSchema = yup.object().shape({
+    address: yup.string().required('Address is required'),
+    phone: yup.number() .min(1000000000, 'Phone number must be exactly 10 numbers long')
     .max(9999999999, 'Phone number must be exactly 10 numbers long').required('Phone is required'),
-    email: Yup.string().required('Email is required').email('Invalid email address'),
-    socialMediaLinks: Yup.object().required('ksdjflk'),
+    email: yup.string().required('Email is required').email('Invalid email address'),
+    socialMediaLinksFacebook: yup.string(),
+    socialMediaLinksTwitter: yup.string(),
+    socialMediaLinksInstagram: yup.string(),
+    socialMediaLinksLinkedin: yup.string(),
   });
   
-const ContactContent = ({
-    data = {
-        address: '',
-        phone: '',
-        email: '',
-        socialMediaLinks: {
-          facebook: '',
-          twitter: '',
-          instagram: '',
-          linkedin: '',
-        }
-    },
-}: props) => {
-    const onSetFormFile = (
-        form: FormikProps<ContactFormModel>,
-        field: FieldInputProps<ContactFormModel>,
-        file: File[]
-    ) => {
-        form.setFieldValue(field.name, URL.createObjectURL(file[0]))
-    }
+const ContactContent = ({ data }: props) => {
+    const dispatch = useAppDispatch();
+    const initialData = {
+        address: data?.address,
+        email: data?.email,
+        phone: data?.phone,
+        socialMediaLinksFacebook: data?.socialMediaLinksFacebook,
+        socialMediaLinksTwitter: data?.socialMediaLinksTwitter,
+        socialMediaLinksInstagram: data?.socialMediaLinksInstagram,
+        socialMediaLinksLinkedin: data?.socialMediaLinksLinkedin
 
-    const onFormSubmit = (
+    }
+    const onFormSubmit = async (
         values: ContactFormModel,
         setSubmitting: (isSubmitting: boolean) => void,
-        resetForm: any
     ) => {
-        console.log('values', values)
-        toast.push(<Notification title={'Contact page updated'} type="success" />, {
-            placement: 'top-center',
-        })
-        resetForm()
+        try {
+            setSubmitting(true);
+            const response = await dispatch(putContact({ ...values, _id: data._id }));
+            if(response.meta.requestStatus == 'fulfilled'){
+                dispatch(fetchContact())
+                toast.push(<Notification title={'Contact page updated'} type="success" />, {
+                    placement: 'top-center',
+                })
+            }
+        } catch (error) {
+            console.error("Error posting contact:", error);
+            toast.push(<Notification title={'Error, try again later'} type="danger" />, {
+                placement: 'top-center',
+            })
+        }
+
+        
         setSubmitting(false)
     }
 
 
     return (
+        <AdaptableCard>
+        <div className="max-w-[800px] mx-auto">
+          
         <Formik
             enableReinitialize
-            initialValues={data}
-            validationSchema={validationSchema}
-            onSubmit={(values, { setSubmitting,resetForm }) => {
+            initialValues={initialData}
+            validationSchema={contactSchema}
+            onSubmit={(values, { setSubmitting }) => {
                 setSubmitting(true)
                 setTimeout(() => {
-                    onFormSubmit(values, setSubmitting,resetForm)
+                    onFormSubmit(values, setSubmitting)
                 }, 1000)
             }}
         >
@@ -147,14 +154,14 @@ const ContactContent = ({
                         </FormRow>
 
                         <FormRow
-                            name="socialMediaLinks"
+                            name="socialMediaLinksFacebook"
                             label="Facebook link"
                             {...validatorProps}
                         >
                             <Field
                             type="text"
                             autoComplete="off"
-                            name="socialMediaLinks.facebook"
+                            name="socialMediaLinksFacebook"
                             placeholder="Facebook"
                             component={Input}
                             prefix={
@@ -163,14 +170,14 @@ const ContactContent = ({
                             />
                         </FormRow>
                         <FormRow
-                            name="socialMediaLinks"
+                            name="socialMediaLinksTwitter"
                             label="Twitter link"
                             {...validatorProps}
                         >
                             <Field
                             type="text"
                             autoComplete="off"
-                            name="socialMediaLinks.twitter"
+                            name="socialMediaLinksTwitter"
                             placeholder="Twitter"
                             component={Input}
                             prefix={
@@ -179,14 +186,14 @@ const ContactContent = ({
                             />
                         </FormRow>
                         <FormRow
-                            name="socialMediaLinks"
+                            name="socialMediaLinksInstagram"
                             label="Instagram link"
                             {...validatorProps}
                         >
                             <Field
                             type="text"
                             autoComplete="off"
-                            name="socialMediaLinks.instagram"
+                            name="socialMediaLinksInstagram"
                             placeholder="Instagram"
                             component={Input}
                             prefix={
@@ -196,14 +203,14 @@ const ContactContent = ({
                         </FormRow>
                         
                         <FormRow
-                            name="socialMediaLinks"
+                            name="socialMediaLinksLinkedin"
                             label="Linkedin link"
                             {...validatorProps}
                         >
                             <Field
                             type="text"
                             autoComplete="off"
-                            name="socialMediaLinks.linkedin"
+                            name="socialMediaLinksLinkedin"
                             placeholder="LinkedIn"
                             component={Input}
                             prefix={
@@ -214,18 +221,11 @@ const ContactContent = ({
                            
                             <div className="mt-4 ltr:text-right">
                                 <Button
-                                    className="ltr:mr-2 rtl:ml-2"
-                                    type="button"
-                                    onClick={() => resetForm()}
-                                >
-                                    Reset
-                                </Button>
-                                <Button
                                     variant="solid"
                                     loading={isSubmitting}
                                     type="submit"
                                 >
-                                    {isSubmitting ? 'Updating' : 'Save'}
+                                    {isSubmitting ? 'Updating' : 'Edit'}
                                 </Button>
                             </div>
                         </FormContainer>
@@ -233,6 +233,10 @@ const ContactContent = ({
                 )
             }}
         </Formik>
+
+    </div>
+    </AdaptableCard>
+          
     )
 }
 

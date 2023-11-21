@@ -1,94 +1,97 @@
-import * as Yup from 'yup'
+import * as yup from 'yup'
 
 import { AdaptableCard, RichTextEditor } from '@/components/shared'
 import { Avatar, Switcher, Upload } from '@/components/ui'
 import { Field, Form, Formik } from 'formik'
 import type { FieldInputProps, FieldProps, FormikProps } from 'formik'
 import { FormContainer, FormItem } from '@/components/ui/Form'
+import { HiPencil, HiPencilAlt } from 'react-icons/hi'
+import { injectReducer, useAppDispatch } from '@/store'
+import reducer, { editAbout, fetchAbout } from './store'
 
 import Button from '@/components/ui/Button'
 import { FcAddImage } from 'react-icons/fc'
 import FormDesription from '../common/FormDescription'
-import FormRow from '../common/FormRow'
-import { HiOutlineUser } from 'react-icons/hi'
 import Input from '@/components/ui/Input'
 import Notification from '@/components/ui/Notification'
 import toast from '@/components/ui/toast'
 
+injectReducer('about', reducer)
+
 export type AboutFormModel = {
-    TopHeader: {
-        heading: string;
-        subHeading: string;
-      };
-      BlockGuide: {
-        heading: string;
-        subHeading: string;
-      };
-      MainHeader: {
-        heading: string;
-        subHeading: string;
-        description: string;
-        image: string;
-        counter: Boolean;
-      };
-      Testimonial: {
-        heading: string;
-        subHeading: string;
-      };
+    topHeader: {
+      heading: string;
+      subHeading: string;
+    };
+    blockGuide: {
+      heading: string;
+      subHeading: string;
+    };
+    mainHeader: {
+      heading: string;
+      subHeading: string;
+      description: string;
+      image: string;
+      counter: Boolean;
+    };
+    testimonial: {
+      heading: string;
+      subHeading: string;
+    };
 }
 
 type props = {
     data?: AboutFormModel
 }
 
-const validationSchema = Yup.object().shape({
-    TopHeader: Yup.object().shape({
-      heading: Yup.string().required('TopHeader Heading is required'),
-      subHeading: Yup.string().required('TopHeader Subheading is required'),
+const validationSchema = yup.object().shape({
+    topHeader: yup.object().shape({
+      heading: yup.string().required('topHeader Heading is required'),
+      subHeading: yup.string().required('topHeader Subheading is required'),
     }),
-    BlockGuide: Yup.object().shape({
-      heading: Yup.string().required('BlockGuide Heading is required'),
-      subHeading: Yup.string().required('BlockGuide Subheading is required'),
+    blockGuide: yup.object().shape({
+      heading: yup.string().required('blockGuide Heading is required'),
+      subHeading: yup.string().required('blockGuide Subheading is required'),
     }),
-    MainHeader: Yup.object().shape({
-      heading: Yup.string().required('MainHeader Heading is required'),
-      subHeading: Yup.string().required('MainHeader Subheading is required'),
-      description: Yup.string().required('MainHeader Description is required'),
-      image: Yup.string().required('MainHeader Image is required'),
-      counter: Yup.number()
-        .required('MainHeader Counter is required')
-        .min(0, 'Counter must be a positive number'),
+    mainHeader: yup.object().shape({
+      heading: yup.string().required('mainHeader Heading is required'),
+      subHeading: yup.string().required('mainHeader Subheading is required'),
+      description: yup.string().required('mainHeader Description is required'),
+      image: yup.string().required('mainHeader Image is required'),
+      counter: yup.boolean()
     }),
-    Testimonial: Yup.object().shape({
-      heading: Yup.string().required('Testimonial Heading is required'),
-      subHeading: Yup.string().required('Testimonial Subheading is required'),
+    testimonial: yup.object().shape({
+      heading: yup.string().required('testimonial Heading is required'),
+      subHeading: yup.string().required('testimonial Subheading is required'),
     }),
-  });
+});
   
+  
+const AboutContent = ({ data }: props) => {
+    const initialData = {
+      topHeader: {
+        heading: data?.topHeader?.heading || '',
+        subHeading: data?.topHeader?.subHeading || '',
+      },
+      blockGuide: {
+        heading: data?.blockGuide?.heading || '',
+        subHeading: data?.blockGuide?.subHeading || '',
+      },
+      mainHeader: {
+        heading: data?.mainHeader?.heading || '',
+        subHeading: data?.mainHeader?.subHeading || '',
+        description: data?.mainHeader?.description || '',
+        image: data?.mainHeader?.image || '',
+        counter: data?.mainHeader?.counter || true,
+      },
+      testimonial: {
+        heading: data?.testimonial?.heading || '',
+        subHeading: data?.testimonial?.subHeading || '',
+      },
+    };
+      
+    const dispatch = useAppDispatch();
 
-const AboutContent = ({
-    data = {
-        TopHeader: {
-            heading: '',
-            subHeading: '',
-          },
-          BlockGuide: {
-            heading: '',
-            subHeading: '',
-          },
-          MainHeader: {
-            heading: '',
-            subHeading: '',
-            description: '',
-            image: '',
-            counter: true,
-          },
-          Testimonial: {
-            heading: '',
-            subHeading: '',
-          },
-    },
-}: props) => {
     const onSetFormFile = (
         form: FormikProps<AboutFormModel>,
         field: FieldInputProps<AboutFormModel>,
@@ -97,19 +100,27 @@ const AboutContent = ({
         form.setFieldValue(field.name, URL.createObjectURL(file[0]))
     }
 
-    const onFormSubmit = (
+    const onFormSubmit = async (
         values: AboutFormModel,
         setSubmitting: (isSubmitting: boolean) => void,
-        resetForm: any
     ) => {
-        console.log('values', values)
-        toast.push(<Notification title={'About page updated'} type="success" />, {
-            placement: 'top-center',
-        })
-        // resetForm()
+        try {
+            setSubmitting(true);
+            const response = await dispatch(editAbout({ ...values, _id: data._id }));
+            if(response.meta.requestStatus == 'fulfilled'){
+                dispatch(fetchAbout())
+                toast.push(<Notification title={'About page updated'} type="success" />, {
+                    placement: 'top-center',
+                })
+            }
+        } catch (error) {
+            console.error("Error posting about page:", error);
+            toast.push(<Notification title={'Error please try  again later.'} type="danger" />, {
+                placement: 'top-center',
+            })
+        }
         setSubmitting(false)
     }
-
 
     return (
         <AdaptableCard>
@@ -117,89 +128,101 @@ const AboutContent = ({
             
         <Formik
             enableReinitialize
-            initialValues={data}
+            initialValues={initialData}
             validationSchema={validationSchema}
-            onSubmit={(values, { setSubmitting,resetForm }) => {
+            onSubmit={(values, { setSubmitting }) => {
                 setSubmitting(true)
                 setTimeout(() => {
-                    onFormSubmit(values, setSubmitting,resetForm)
+                    onFormSubmit(values, setSubmitting)
                 }, 1000)
             }}
         >
             {({ values, touched, errors, isSubmitting, resetForm }) => {
-                const validatorProps = { touched, errors }
                 return (
-                    <Form>
+                <Form>
                         <FormContainer>
                             <FormDesription
                                 title="Top About Page Heading"
                                 desc="Basic info for your about page"
                                 className='mb-3'
                             />
-                           
-                           <FormItem
-                                label="Heading"
-                                invalid={(errors.TopHeader?.heading && touched.TopHeader?.heading) as boolean}
-                                errorMessage={errors.TopHeader?.heading}
-                            >
-                                <Field
-                                    type="text"
-                                    autoComplete="off"
-                                    name="TopHeader.heading"
-                                    placeholder="Looking for joy?"
-                                    component={Input}
-                                />
-                            </FormItem>
 
                             <FormItem
-                                label="Subheading"
-                                invalid={(errors.TopHeader?.subHeading && touched.TopHeader?.subHeading) as boolean}
-                                errorMessage={errors.TopHeader?.subHeading}
+                                label="Heading"
+                                invalid={(errors.topHeader?.heading && touched.topHeader?.heading) as boolean}
+                                errorMessage={errors.topHeader?.heading}
                             >
                                 <Field
                                 type="text"
                                 autoComplete="off"
-                                name="TopHeader.subHeading"
+                                name="topHeader.heading"
+                                placeholder="Find Next Place To Visit"
+                                component={Input}
+                                prefix={
+                                    <HiPencilAlt className='text-xl text-green-700' />
+                                }
+                                />
+                            </FormItem>
+                           
+
+                            <FormItem
+                                label="Subheading"
+                                invalid={(errors.topHeader?.subHeading && touched.topHeader?.subHeading) as boolean}
+                                errorMessage={errors.topHeader?.subHeading}
+                            >
+                                <Field
+                                type="text"
+                                autoComplete="off"
+                                name="topHeader.subHeading"
                                 placeholder="Your trusted trip companion"
                                 component={Input}
+                                prefix={
+                                    <HiPencil className='text-xl text-gray-500' />
+                                }
                                 />
                             </FormItem>
 
-                            {/* BlockGuide Section */}
+                            {/* blockGuide Section */}
                             <FormDesription
-                                title="BlockGuide Heading"
+                                title="blockGuide Heading"
                                 desc="Basic info for your about page"
                                 className='mb-3'
                             />
                             <FormItem
                                 label="Heading"
-                                invalid={(errors.BlockGuide?.heading && touched.BlockGuide?.heading) as boolean}
-                                errorMessage={errors.BlockGuide?.heading}
+                                invalid={(errors.blockGuide?.heading && touched.blockGuide?.heading) as boolean}
+                                errorMessage={errors.blockGuide?.heading}
                             >
                                 <Field
                                 type="text"
                                 autoComplete="off"
-                                name="BlockGuide.heading"
+                                name="blockGuide.heading"
                                 placeholder="Why Choose Us?"
                                 component={Input}
+                                prefix={
+                                    <HiPencilAlt className='text-xl text-green-700' />
+                                }
                                 />
                             </FormItem>
 
                             <FormItem
                                 label="Subheading"
-                                invalid={(errors.BlockGuide?.subHeading && touched.BlockGuide?.subHeading) as boolean}
-                                errorMessage={errors.BlockGuide?.subHeading}
+                                invalid={(errors.blockGuide?.subHeading && touched.blockGuide?.subHeading) as boolean}
+                                errorMessage={errors.blockGuide?.subHeading}
                             >
                                 <Field
                                 type="text"
                                 autoComplete="off"
-                                name="BlockGuide.subHeading"
+                                name="blockGuide.subHeading"
                                 placeholder="These popular destinations have a lot to offer"
                                 component={Input}
+                                prefix={
+                                    <HiPencil className='text-xl text-green-400' />
+                                }
                                 />
                             </FormItem>
 
-                            {/* MainHeader Section */}
+                            {/* mainHeader Section */}
                             <FormDesription
                                 title="Main About Page Header"
                                 desc="Basic info for your about page"
@@ -207,38 +230,44 @@ const AboutContent = ({
                             />
                             <FormItem
                                 label="Heading"
-                                invalid={(errors.MainHeader?.heading && touched.MainHeader?.heading) as boolean}
-                                errorMessage={errors.MainHeader?.heading}
+                                invalid={(errors.mainHeader?.heading && touched.mainHeader?.heading) as boolean}
+                                errorMessage={errors.mainHeader?.heading}
                             >
                                 <Field
                                 type="text"
                                 autoComplete="off"
-                                name="MainHeader.heading"
+                                name="mainHeader.heading"
                                 placeholder="About Eurasia"
                                 component={Input}
+                                prefix={
+                                    <HiPencilAlt className='text-xl text-blue-700' />
+                                }
                                 />
                             </FormItem>
 
                             <FormItem
                                 label="Subheading"
-                                invalid={(errors.MainHeader?.subHeading && touched.MainHeader?.subHeading) as boolean}
-                                errorMessage={errors.MainHeader?.subHeading}
+                                invalid={(errors.mainHeader?.subHeading && touched.mainHeader?.subHeading) as boolean}
+                                errorMessage={errors.mainHeader?.subHeading}
                             >
                                 <Field
                                 type="text"
                                 autoComplete="off"
-                                name="MainHeader.subHeading"
+                                name="mainHeader.subHeading"
                                 placeholder="Embark on Unforgettable Journeys with Us"
                                 component={Input}
+                                prefix={
+                                    <HiPencil className='text-xl text-blue-400' />
+                                }
                                 />
                             </FormItem>
 
                             <FormItem
                                 label="Description"
-                                invalid={(errors.MainHeader?.description && touched.MainHeader?.description) as boolean}
-                                errorMessage={errors.MainHeader?.description}
+                                invalid={(errors.mainHeader?.description && touched.mainHeader?.description) as boolean}
+                                errorMessage={errors.mainHeader?.description}
                             >
-                                <Field name="MainHeader.description">
+                                <Field name="mainHeader.description">
                                     {({ field, form }: FieldProps) => (
                                         <RichTextEditor
                                             value={field.value}
@@ -255,10 +284,10 @@ const AboutContent = ({
                             <FormItem
                                 label="Image"
                                 className='w-1/2 h-auto'
-                                invalid={(errors.MainHeader?.image && touched.MainHeader?.image) as boolean}
-                                errorMessage={errors.MainHeader?.image}
+                                invalid={(errors.mainHeader?.image && touched.mainHeader?.image) as boolean}
+                                errorMessage={errors.mainHeader?.image}
                             >
-                                <Field name="MainHeader.image">
+                                <Field name="mainHeader.image">
                                     {({ field, form }: FieldProps) => {
                                         const avatarProps = field.value
                                             ? { src: field.value }
@@ -299,48 +328,56 @@ const AboutContent = ({
                             <FormItem
                                 label="Counter"
                                 className='w-1/2 h-auto'
-                                invalid={(errors.MainHeader?.counter && touched.MainHeader?.counter) as boolean}
+                                invalid={(errors.mainHeader?.counter && touched.mainHeader?.counter) as boolean}
                                 >
                                 <Field
-                                    name="MainHeader.counter"
+                                    name="mainHeader.counter"
                                     component={Switcher}
                                 />
                             </FormItem>
                         </div>
 
-                            {/* Testimonial Section */}
+                            {/* testimonial Section */}
                             <FormDesription
-                                title="Testimonial Section Header"
+                                title="testimonial Section Header"
                                 desc="Basic info for your about page"
                                 className='mb-3'
                                 />
                             <FormItem
-                                label="Testimonial Heading"
-                                invalid={(errors.Testimonial?.heading && touched.Testimonial?.heading) as boolean}
-                                errorMessage={errors.Testimonial?.heading}
-                                >
+                                label="testimonial Heading"
+                                invalid={(errors.testimonial?.heading && touched.testimonial?.heading) as boolean}
+                                errorMessage={errors.testimonial?.heading}
+                            >
                                 <Field
-                                type="text"
-                                autoComplete="off"
-                                name="Testimonial.heading"
-                                placeholder="Overheard from travelers"
-                                component={Input}
+                                    type="text"
+                                    autoComplete="off"
+                                    name="testimonial.heading"
+                                    placeholder="Overheard from travelers"
+                                    component={Input}
+                                    prefix={
+                                        <HiPencilAlt className='text-xl text-red-700' />
+                                    }
                                 />
                             </FormItem>
 
                             <FormItem
-                                label="Testimonial Subheading"
-                                invalid={(errors.Testimonial?.subHeading && touched.Testimonial?.subHeading) as boolean}
-                                errorMessage={errors.Testimonial?.subHeading}
+                                label="testimonial Subheading"
+                                invalid={(errors.testimonial?.subHeading && touched.testimonial?.subHeading) as boolean}
+                                errorMessage={errors.testimonial?.subHeading}
                             >
                                 <Field
-                                type="text"
-                                autoComplete="off"
-                                name="Testimonial.subHeading"
-                                placeholder="These popular destinations have a lot to offer"
-                                component={Input}
+                                    type="text"
+                                    autoComplete="off"
+                                    name="testimonial.subHeading"
+                                    placeholder="These popular destinations have a lot to offer"
+                                    component={Input}
+                                    prefix={
+                                        <HiPencil className='text-xl text-red-400' />
+                                    }
                                 />
+
                             </FormItem>
+
                             <div className="mt-4 ltr:text-right">
                                 <Button
                                     className="ltr:mr-2 rtl:ml-2"
@@ -354,7 +391,7 @@ const AboutContent = ({
                                     loading={isSubmitting}
                                     type="submit"
                                 >
-                                    {isSubmitting ? 'Updating' : 'Save'}
+                                    {isSubmitting ? 'Updating' : 'Edit'}
                                 </Button>
                             </div>
                         </FormContainer>
@@ -362,9 +399,9 @@ const AboutContent = ({
                 )
             }}
         </Formik>
-    
         </div>
-    </AdaptableCard>
+        </AdaptableCard>
+            
     )
 }
 

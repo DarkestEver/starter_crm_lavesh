@@ -14,7 +14,7 @@ const HotelTableTools = () => {
             <ProductFilter /> */}
             <Link
                 className="block lg:inline-block md:mb-0 mb-4"
-                to="/cms/Hotels/edit"
+                to="/cms/hotels/save"
             >
                 <Button block variant="solid" size="sm" icon={<HiPlusCircle />}>
                     Add Hotel

@@ -165,7 +165,6 @@ const HotelImages = (props: HotelImagesProps) => {
             img: URL.createObjectURL(files[latestUpload]),
         }
         const imageList = [...values.slideImg, ...[image]]
-        console.log('imageList', imageList)
         form.setFieldValue(field.name, imageList)
     }
 
