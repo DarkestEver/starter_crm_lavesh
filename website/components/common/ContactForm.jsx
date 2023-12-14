@@ -1,8 +1,10 @@
-import axios from "axios";
-import React, { useState } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+import React, { useState } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+
+import ReCAPTCHA from "react-google-recaptcha";
+import axios from "axios";
 import { z } from "zod";
 
 const contactFormSchema = z.object({
@@ -65,7 +67,6 @@ const ContactForm = () => {
           });
         })
         .catch((error) => {
-          // console.error(error)
           toast.error("Something went wrong! Try again later.", {
             position: "bottom-right",
             autoClose: 5000,

@@ -8,6 +8,7 @@ import Categories from "../../components/destinations/components/Categories";
 import City from "../../components/destinations/City";
 import DefaultFooter from "../../components/footer/default";
 import DefaultHeader from "../../components/header/default-header";
+import Highlights from "../../components/highlights/Highlights";
 import Hotels from "../../components/hotels/Hotels2";
 import Image from "next/image";
 import IntroTown from "../../components/destinations/components/IntroTown";
@@ -18,19 +19,20 @@ import Tours from "../../components/tours/Tours";
 import { destinations } from "../../data/desinations";
 
 const Destinations =  ({destination}) => {
+  console.log(destination)
 
   return (
     <>
       <Seo 
-        pageTitle="Destination"
+        pageTitle={`${destination?.country}`}
         metaTitle={`Discover ${destination?.country} - Explore Attractions, Culture, and More`}
-        metaDescription={`Plan your trip to ${destination?.country} with Eurasia. Learn about the attractions, culture, cuisine, and more to make the most of your travel experience.`}
+        metaDescription={destination?.metaDescription}
         ogImage={`/img/seo/destination-page.PNG`}
         ogImageAlt={`${destination?.country}-page-image`}
-        twitterHandle="@eurassia"
+        twitterHandle="@Eurasiab2bdmc"
         canonicalUrl={`${process.env.BASE_URL}/destination/${destination?.param}`}
         robotsContent="index, follow"
-        keywords={`${destination?.country} Travel, ${destination?.country} Attractions, ${destination?.country} Culture, ${destination?.country} Cuisine, Eurasia Destination`}
+        keywords={destination?.keywords}
       />
 
       <div className="header-margin"></div>
@@ -94,6 +96,26 @@ const Destinations =  ({destination}) => {
           
         </div>
       </section>
+
+      
+      <section className="layout-pt-md layout-pb-md">
+        <div className="container">
+          <div className="row y-gap-20 justify-between items-end">
+            <div className="col-auto">
+              <div className="sectionTitle -md">
+                <h2 className="sectionTitle__title">{destination?.country} Highlights</h2>
+                <p className=" sectionTitle__text mt-5 sm:mt-0">
+                  Explore locals&apos; picks for the Best food, hangouts and attractions!
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="row y-gap-30 pt-10 sm:pt-20 item_gap-x30">
+            <Highlights highlightsData={destination?.highlightsData} />
+          </div>
+        </div>
+      </section>
       
       { destination?.city && <section data-aos="fade-up">
         <div className="container">
@@ -127,7 +149,6 @@ const Destinations =  ({destination}) => {
               </div>
             </div>
             </div>
-
           <div className="row y-gap-30 pt-40 sm:pt-20 item_gap-x30">
             <Hotels />
           </div>

@@ -1,11 +1,10 @@
-import { NewsletterEmail } from './../emails/NewsletterEmail';
+import { NewsletterEmail } from '../../components/emails/NewsletterEmail';
 import { render } from '@react-email/render';
 import sendEmail from "../../utils/sendEmail";
 
 export default async function POST(req,res) {
     try {
         const { email } = req.body;
-        console.log({email})
 
         const emailHtml = render(<NewsletterEmail email={email}/>);
         const result = sendEmail(email,emailHtml);

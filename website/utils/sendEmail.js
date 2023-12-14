@@ -19,8 +19,8 @@ export default function sendEmail(email,emailHtml){
         subject: 'Thank You for Contacting Eurasia',
         html: emailHtml,
         attachments: [{
-            filename: "FINAL EURASIA GLOBAL LOGO.png",
-            path: `${process.env.BASE_URL}/img/general/FINAL EURASIA GLOBAL LOGO.png`,
+            filename: "eurasia-global-logo.png",
+            path: `${process.env.BASE_URL}/img/general/eurasia-global-logo.png`,
             cid: "unique@logoImage.info"
         }]    
     };
@@ -30,7 +30,6 @@ export default function sendEmail(email,emailHtml){
     if (error) {
         console.error('Error sending email:', error);
     } else {
-        console.log('Email sent:', info.response);
         return info;
     }
     });

@@ -21,12 +21,13 @@ module.exports = [
   },
   {
     id: 3,
-    title: "Other Services",
+    title: "Social Links",
     menuList: [
-      { name: "Activity Finder", routerPath: "/" },
-      { name: "Tour List", routerPath: "/" },
-      { name: "Holiday Rental", routerPath: "/" },
-      { name: "Travel Agents", routerPath: "/" },
+      { name: "Facebook", routerPath: "https://www.facebook.com/EurasiaB2BGlobalDMC" },
+      { name: "Twitter" , routerPath: "https://twitter.com/Eurasiab2bdmc" },
+      { name: "Instagram", routerPath: "https://www.instagram.com/eurasia_global_dmc/?hl=en" },
+      { name: "LinkedIn", routerPath: "https://www.linkedin.com/company/eurasia-b2b-global-dmc-pvt-ltd/" },
+      { name: "Pinterest" , routerPath: "https://www.pinterest.com/eurasiab2bglobaldmcpvtltd/" },
     ],
   }
 ];

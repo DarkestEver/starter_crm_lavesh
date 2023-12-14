@@ -14,7 +14,7 @@ import { store } from "../app/store";
 import { useEffect } from "react";
 
 if (typeof window !== "undefined") {
-  require("bootstrap/dist/js/bootstrap");
+  import ("bootstrap/dist/js/bootstrap");
 }
 
 export default function App({ Component, pageProps }) {
@@ -30,8 +30,8 @@ export default function App({ Component, pageProps }) {
       <Provider store={store}>
 
       <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GA_MEASUREMENT_ID}`}
         strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GA_MEASUREMENT_ID}`}
       />
       <Script id="google-analytics" strategy="afterInteractive">
         {`
@@ -39,7 +39,7 @@ export default function App({ Component, pageProps }) {
           function gtag(){window.dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', ${process.env.GA_MEASUREMENT_ID});
+          gtag('config', '${process.env.GA_MEASUREMENT_ID}' );
         `}
       </Script>
 

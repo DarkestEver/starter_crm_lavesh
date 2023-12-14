@@ -13,7 +13,7 @@ const Blog4 = () => {
           data-aos-delay={item.delayAnimation}
         >
           <Link
-            href={`/blog/blog-details/${item.id}`}
+            href=''
             className="blogCard -type-1 d-block "
           >
             <div className="blogCard__image">

@@ -12,11 +12,11 @@ const NotFound = () => {
   };
 
   return (
-    <section className="layout-pt-lg layout-pb-lg">
+    <section className="layout-pt-sm layout-pb-lg">
       <div className="container">
         <div className="row y-gap-30 justify-between items-center">
           <div className="col-lg-6">
-            <Image width={50} height={50} src={data.imageSrc} alt="image" />
+            <Image width={500} height={500} src={data.imageSrc} alt="image" />
           </div>
           <div className="col-lg-5">
             <div className="no-page">

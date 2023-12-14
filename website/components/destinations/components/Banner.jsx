@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const Banner = ({destination}) => {
+const Banner = ({ destination }) => {
   return (
     <> 
     <div className="col-12">

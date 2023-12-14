@@ -1,11 +1,10 @@
-import { QueryEmail } from './../emails/QueryEmail';
+import { QueryEmail } from '../../components/emails/QueryEmail';
 import { render } from '@react-email/render';
 import sendEmail from "../../utils/sendEmail";
 
 export default async function POST(req,res) {
     try {
         const {location,dates,guests,email,phone} = req.body;
-        console.log({location,dates,guests,email,phone})
 
         const emailHtml = render(<QueryEmail location={location} dates={dates} guests={guests} email={email} phone={phone} />);
         const result = sendEmail(email,emailHtml);

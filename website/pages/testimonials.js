@@ -14,10 +14,10 @@ const Testimonials = () => {
         metaDescription="Explore testimonials and reviews from our happy clients. Discover how Eurasia has made their journeys memorable and extraordinary."
         ogImage="/img/seo/testimonials-page.PNG"
         ogImageAlt="testimonials-page-image"
-        twitterHandle="@eurassia"
+        twitterHandle="@Eurasiab2bdmc"
         canonicalUrl={`${process.env.BASE_URL}/testimonials`}
         robotsContent="index, follow"
-        keywords="Testimonials, Client Reviews, Travel Experiences, Client Testimonials, Happy Clients, Eurasia Global DMC Testimonials"
+        keywords="eurasia global,eurasia global dmc, eurasia DMC, eurasia, eurasia b2b, eurasia b2b dmc,Testimonials, Client Reviews, Travel Experiences, Client Testimonials, Happy Clients, Eurasia Testimonials"
       />
 
 

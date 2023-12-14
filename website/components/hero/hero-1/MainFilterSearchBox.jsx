@@ -3,7 +3,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 
 import { DateObject } from "react-multi-date-picker";
-import DateSearch from "../DateSearch";
+import DateSearch from "./DateSearch";
 import GuestSearch from "./GuestSearch";
 import LocationSearch from "./LocationSearch";
 import axios from "axios";
@@ -109,13 +109,16 @@ const MainFilterSearchBox = () => {
         <div className="button-grid items-center">
 
           <LocationSearch setLocation={setLocation} location={location} />
+          
           <div className="searchMenu-date px-20 lg:py-20 lg:px-0 js-form-dd js-calendar">
             <div>
               {/* <h4 className="text-15 fw-500 ls-2 lh-16">CheckIn - CheckOut</h4> */}
               <DateSearch setDates={setDates} dates={dates} />
             </div>
           </div>
+
           <GuestSearch setGuests={setGuests} guests={guests} />
+
           <div className="searchMenu-date px-20 lg:py-20 lg:px-0 js-form-dd js-calendar">
             <div>
               {/* <h4 className="text-15 fw-500 ls-2 lh-16">Email</h4> */}

@@ -11,7 +11,7 @@ const MobileMenu = () => {
     <>
       <div className="pro-header d-flex align-items-center justify-between border-bottom-light">
         <Link href="/">
-          <Image width={120} height={120} priority={true} src="/img/general/FINAL EURASIA GLOBAL LOGO.png" alt="logo icon" />
+          <Image width={120} height={120} priority={true} src="/img/general/eurasia-global-logo.png" alt="logo icon" />
         </Link>
 
         <div
@@ -50,7 +50,7 @@ const MobileMenu = () => {
 
           <MenuItem component={<Link href="/testimonials" />}> Testimonials </MenuItem>
           <MenuItem component={<Link href="/about" />}> About Us </MenuItem>
-          <MenuItem component={<Link href="/blog" />}> Blogs </MenuItem>
+          <MenuItem component={<Link href="https://blog.eurasiaglobal.net" />}> Blogs </MenuItem>
           <MenuItem component={<Link href="/contact" />}> Contact Us </MenuItem>
         </Menu>
       </Sidebar>

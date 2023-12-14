@@ -1,11 +1,60 @@
 # Ignore .env file in both client and server
 client/.env
 server/.env
+website/.env
 
 # Ignore node_modules in both client and server
-client/node_modules/
-server/node_modules/
+website/node_modules/@next/swc-win32-x64-msvc/next-swc.win32-x64-msvc.node
+website/node_modules
+server/node_modules
+client/node_modules
+**/node_modules
 
-# Ignore specific files in client and server
-client/somefile.js
-server/somefile.js
+
+# Yarn
+**/.yarn
+**/.yarnrc
+**/.yarn-integrity
+
+# Yarn
+client/.yarn/
+client/.yarnrc
+client/.yarn-integrity
+
+# Yarn
+server/.yarn/
+server/.yarnrc
+server/.yarn-integrity
+
+# Yarn
+website/.yarn/
+website/.yarnrc
+website/.yarn-integrity
+
+# Optional: Logs and debugging
+**/npm-debug.log
+**/yarn-debug.log*
+**/yarn-error.log*
+
+
+# Optional: Logs and debugging
+client/npm-debug.log
+client/yarn-debug.log*
+client/yarn-error.log*
+
+# Optional: Logs and debugging
+server/npm-debug.log
+server/yarn-debug.log*
+server/yarn-error.log*
+
+# Optional: Logs and debugging
+website/npm-debug.log
+website/yarn-debug.log*
+website/yarn-error.log*
+
+# Optional: Editor directories and files
+**/.vscode/
+**/.idea/
+
+website/.vscode/
+website/.idea/

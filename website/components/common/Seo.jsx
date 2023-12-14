@@ -5,7 +5,7 @@ const Seo = ({ pageTitle, metaTitle, metaDescription ,ogImage,ogImageAlt, twitte
     <Head>
       <title>
         {pageTitle &&
-          `${pageTitle} || Eurasia Global DMC`}
+          `${pageTitle} || ${process.env.WEBSITE_NAME}`}
       </title>
       
       <script

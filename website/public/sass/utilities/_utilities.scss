@@ -1118,8 +1118,8 @@ $_displays: none, inline-block, block, flex;
     transform: translateY(-50%) translateX(-50%);
     background-color: black;
     border-radius: 100%;
-    width: rem(52px);
-    height: rem(52px);
+    width: rem(52px,16px);
+    height: rem(52px,16px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1129,16 +1129,16 @@ $_displays: none, inline-block, block, flex;
     .icon {
       color: white;
       stroke-width: 1;
-      width: rem(28px);
-      height: rem(28px);
+      width: rem(28px,10px);
+      height: rem(28px,10px);
     }
 
     &.-bottom-right {
       top: unset;
       left: unset;
       transform: unset;
-      bottom: rem(30px);
-      right: rem(30px);
+      bottom: rem(30px,12px);
+      right: rem(30px,12px);
     }
   }
 }

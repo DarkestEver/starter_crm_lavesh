@@ -13,10 +13,10 @@ const Contact = () => {
       <Seo 
         pageTitle="Contact"
         metaTitle="Get In Touch - Contact Eurasia"
-        metaDescription="Reach out to Eurasia for inquiries, bookings, or any travel-related assistance. We're here to help you plan your dream journey and make it a reality."
+        metaDescription={`Connect with Eurasia B2B Global DMC  - Your Travel Companion. For travel inquiries, booking assistance, and to get in touch, feel free to contact us. `}
         ogImage="/img/seo/contact-page.PNG"
         ogImageAlt="contact page-image" 
-        twitterHandle="@eurassia" 
+        twitterHandle="@Eurasiab2bdmc" 
         canonicalUrl={`${process.env.BASE_URL}/contact`} 
         robotsContent="index, follow"
         keywords="Eurasia,contact us,get in touch,travel inquiries,booking assistance"
@@ -27,14 +27,17 @@ const Contact = () => {
 
       <DefaultHeader />
 
+      
       <div className="map-outer">
         <div className="map-canvas">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d182586.0420340798!2d-73.99038430252834!3d40.749936548349346!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sbd!4v1670824458615!5m2!1sen!2sbd"
+            title="Noida, India Map"
             loading="lazy"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3560.2642216655867!2d77.39102651439516!3d28.535516982443!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce4d5e9317dd9%3A0x5d7a6c4eaa57c4d6!2sNoida%2C%20Uttar%20Pradesh%2C%20India!5e0!3m2!1sen!2sus!4v1670824458615!5m2!1sen!2sus"
           ></iframe>
         </div>
       </div>
+
 
       <section className="relative container">
         <div className="row justify-end">

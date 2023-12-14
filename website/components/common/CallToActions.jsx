@@ -67,7 +67,7 @@ const CallToActions = () => {
               </div>
               <div className="col-auto">
                 <strong className="text-26 text-white fw-600">
-                  Your Travel Journey Starts Here
+                  Ghooma nahi to kya kiya ?
                 </strong>
                 <div className="text-white">
                   Sign up and we`&apos;ll send the best deals to you

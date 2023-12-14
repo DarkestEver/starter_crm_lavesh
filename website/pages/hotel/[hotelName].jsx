@@ -1,7 +1,6 @@
 import "photoswipe/dist/photoswipe.css";
 
 import { Gallery, Item } from "react-photoswipe-gallery";
-import { useEffect, useState } from "react";
 
 import CallToActions from "../../components/common/CallToActions";
 import DefaultFooter from "../../components/footer/default";
@@ -18,35 +17,21 @@ import Seo from "../../components/common/Seo";
 import SidebarRight from "../../components/hotel-single/SidebarRight";
 import StickyHeader from "../../components/hotel-single/StickyHeader";
 import { hotelsData } from "../../data/hotels";
-import { useRouter } from "next/router";
 
-const HotelSingleV1Dynamic = () => {
-  const router = useRouter();
-  const [hotel, setHotel] = useState({});
-  const hotelName = router.query.hotelName;
-
-  useEffect(() => {
-    const foundHotel = hotelsData.find((item) => item.param == hotelName);
-    if (!hotelName) <h1>Loading...</h1>;
-    else if (!foundHotel) {
-      router.push('/404')
-      return;
-    }
-    else setHotel(foundHotel);
-  }, [hotelName,router]);
-
+const HotelSingleV1Dynamic = ({ hotel }) => {
+  
   return (
     <>
       <Seo 
-        pageTitle="Hotel"
+        pageTitle={`${hotel?.title}`}
         metaTitle="Discover Charming Hotels - Your Comfortable Retreats with Eurasia"
         metaDescription="Explore a curated selection of charming hotels across various destinations with Eurasia. Find your perfect home away from home for an unforgettable travel experience."
         ogImage="/img/seo/hotels-page.jpg"
         ogImageAlt="hotels-page-image"
-        twitterHandle="@eurassia"
+        twitterHandle="@Eurasiab2bdmc"
         canonicalUrl={`${process.env.BASE_URL}/hotels`}
         robotsContent="index, follow"
-        keywords="Hotels, Accommodations, Charming Stays, Eurasia Hotels, Comfortable Retreats, Travel and Stay, Hotel Deals"
+        keywords="eurasia global,eurasia global dmc, eurasia DMC, eurasia, eurasia b2b, eurasia b2b dmc,Hotels, Accommodations, Charming Stays, Eurasia Hotels, Comfortable Retreats, Travel and Stay, Hotel Deals"
       />
 
       <div className="header-margin"></div>
@@ -240,3 +225,32 @@ const HotelSingleV1Dynamic = () => {
 };
 
 export default HotelSingleV1Dynamic;
+
+export async function getStaticPaths() { 
+  const paths = hotelsData.map((hotel) => ({
+    params: { hotelName: hotel.param },
+  }));
+
+  return {
+    paths,
+    fallback: false, 
+  };
+}
+
+export async function getStaticProps({ params }) {
+  const { hotelName } = params;
+  const foundHotel = hotelsData.find((hotel) => hotel.param === hotelName);
+
+  if (!foundHotel) {
+    return {
+      notFound: true, 
+    };
+  }
+
+  return {
+    props: {
+      hotel: foundHotel,
+    },
+  };
+}
+

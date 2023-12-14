@@ -1,468 +1,129 @@
-function generateSiteMap(sitemapData) {
-  return `<?xml version="1.0" encoding="UTF-8"?>
-   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-     ${sitemapData.map((item) => {
-         return `
-       <url>
-          <loc>${`${process.env.BASE_URL}${item.url}`}</loc>
-          <lastmod>${item.lastmod}</lastmod>
-          <changefreq>${item.changefreq}</changefreq>
-          <priority>${item.priority}</priority>
-       </url>
-     `;
-       })
-       .join('')}
-   </urlset>
- `;
-}
+import { getB2bDmcUrl, getBlogsUrl, getDestinationUrl, getHotelUrl } from "../utils/dynamicDataUrl"
 
-function SiteMap() {
-  return null;
-}
+import fs from "fs";
 
-export async function getServerSideProps({ res }) {
-  // We make an API call to gather the URLs for our site
-  const sitemapUrl = [
-    {
-      "id": 1,
-      "url": "/",
-      "changefreq": "monthly",
-      "priority": 1.0,
-      "lastmod": "2023-10-19T21:30:00+00:00"
-  },
-  {
-      "id": 2,
-      "url": "/testimonials",
-      "changefreq": "monthly",
-      "priority": 0.4,
-      "lastmod": "2023-10-19T21:30:00+00:00"
-  },
-  {
-      "id": 3,
-      "url": "/about",
-      "changefreq": "monthly",
-      "priority": 0.8,
-      "lastmod": "2023-10-19T21:30:00+00:00"
-  },
-  {
-      "id": 4,
-      "url": "/blog",
-      "changefreq": "monthly",
-      "priority": 1.0,
-      "lastmod": "2023-10-19T21:30:00+00:00"
-  },
-  {
-      "id": 5,
-      "url": "/blog/discovering-almaty-the-gem-of-kazakhstan",
-      "changefreq": "monthly",
-      "priority": 1.0,
-      "lastmod": "2023-10-19T21:30:00+00:00"
-  },
-  {
-      "id": 6,
-      "url": "/blog/tashkent-unveiled-where-tradition-meets-modernity",
-      "changefreq": "monthly",
-      "priority": 1.0,
-      "lastmod": "2023-10-19T21:30:00+00:00"
-  },
-  {
-      "id": 7,
-      "url": "/contact",
-      "changefreq": "monthly",
-      "priority": 1.0,
-      "lastmod": "2023-10-19T21:30:00+00:00"
-  },
-  {
-      "id": 8,
-      "url": "/destination/turkey",
-      "changefreq": "monthly",
-      "priority": 0.8,
-      "lastmod": "2023-10-19T21:30:00+00:00"
-  },
-  {
-      "id": 9,
-      "url": "/destination/azerbaijan",
-      "changefreq": "monthly",
-      "priority": 0.8,
-      "lastmod": "2023-10-19T21:30:00+00:00"
-  },
-  {
-      "id": 10,
-      "url": "/destination/kazakhstan",
-      "changefreq": "monthly",
-      "priority": 0.8,
-      "lastmod": "2023-10-19T21:30:00+00:00"
-  },
-  {
-      "id": 11,
-      "url": "/destination/uzbekistan",
-      "changefreq": "monthly",
-      "priority": 0.8,
-      "lastmod": "2023-10-19T21:30:00+00:00"
-  },
-  {
-      "id": 12,
-      "url": "/destination/russia",
-      "changefreq": "monthly",
-      "priority": 0.8,
-      "lastmod": "2023-10-19T21:30:00+00:00"
-  },
-  {
-      "id": 13,
-      "url": "/destination/armenia",
-      "changefreq": "monthly",
-      "priority": 0.8,
-      "lastmod": "2023-10-19T21:30:00+00:00"
-  },
-  {
-      "id": 14,
-      "url": "/destination/georgia",
-      "changefreq": "monthly",
-      "priority": 0.8,
-      "lastmod": "2023-10-19T21:30:00+00:00"
-  },
-  {
-      "id": 15,
-      "url": "/destination/bishkek",
-      "changefreq": "monthly",
-      "priority": 0.8,
-      "lastmod": "2023-10-19T21:30:00+00:00"
-  },
-  {
-      "id": 16,
-      "url": "/destination/istanbul",
-      "changefreq": "monthly",
-      "priority": 0.8,
-      "lastmod": "2023-10-19T21:30:00+00:00"
-  },
-  {
-      "id": 17,
-      "url": "/destination/cappadocia",
-      "changefreq": "monthly",
-      "priority": 0.8,
-      "lastmod": "2023-10-19T21:30:00+00:00"
-  },
-  {
-      "id": 18,
-      "url": "/destination/antalya",
-      "changefreq": "monthly",
-      "priority": 0.8,
-      "lastmod": "2023-10-19T21:30:00+00:00"
-  },
-  {
-      "id": 19,
-      "url": "/destination/almaty",
-      "changefreq": "monthly",
-      "priority": 0.8,
-      "lastmod": "2023-10-19T21:30:00+00:00"
-  },
-  {
-      "id": 20,
-      "url": "/destination/baku",
-      "changefreq": "monthly",
-      "priority": 0.8,
-      "lastmod": "2023-10-19T21:30:00+00:00"
-  },
-  {
-    "id": 21,
-    "url": "/destination/samarkand",
-    "changefreq": "monthly",
-    "priority": 0.8,
-    "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-    "id": 22,
-    "url": "/destination/tashkent",
-    "changefreq": "monthly",
-    "priority": 0.8,
-    "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-    "id": 23,
-    "url": "/destination/bukhara",
-    "changefreq": "monthly",
-    "priority": 0.8,
-    "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-    "id": 24,
-    "url": "/destination/khiva",
-    "changefreq": "monthly",
-    "priority": 0.8,
-    "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-    "id": 25,
-    "url": "/hotel/metropolitan-taksim-hotel",
-    "changefreq": "monthly",
-    "priority": 0.8,
-    "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-    "id": 26,
-    "url": "/hotel/marmara-taksim",
-    "changefreq": "monthly",
-    "priority": 0.8,
-    "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-    "id": 27,
-    "url": "/hotel/elite-world-taksim",
-    "changefreq": "monthly",
-    "priority": 0.8,
-    "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-    "id": 28,
-    "url": "/hotel/cappa-via-cave-hotel",
-    "changefreq": "monthly",
-    "priority": 0.8,
-    "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-    "id": 29,
-    "url": "/hotel/kalekonak-cave-hotel",
-    "changefreq": "monthly",
-    "priority": 0.8,
-    "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-    "id": 30,
-    "url": "/hotel/doors-of-cappadocia",
-    "changefreq": "monthly",
-    "priority": 0.8,
-    "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-    "id": 31,
-    "url": "/hotel/dedli-cave",
-    "changefreq": "monthly",
-    "priority": 0.8,
-    "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-    "id": 32,
-    "url": "/hotel/ring-downtown-hotel",
-    "changefreq": "monthly",
-    "priority": 0.8,
-    "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-    "id": 33,
-    "url": "/hotel/antalya-cender-hotel",
-    "changefreq": "monthly",
-    "priority": 0.8,
-    "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-    "id": 34,
-    "url": "/hotel/ramada-plaza",
-    "changefreq": "monthly",
-    "priority": 0.8,
-    "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-    "id": 35,
-    "url": "/hotel/gabala-hotel",
-    "changefreq": "monthly",
-    "priority": 0.8,
-    "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 36,
-  "url": "/hotel/gabala-garden-5",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 37,
-  "url": "/hotel/west-shine",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 38,
-  "url": "/hotel/shapphire-city",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 39,
-  "url": "/hotel/shapphire-inn",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 40,
-  "url": "/hotel/mogan",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 41,
-  "url": "/hotel/badamdar",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 42,
-  "url": "/hotel/hayatt",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 43,
-  "url": "/hotel/hilton",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 44,
-  "url": "/hotel/marriott",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 45,
-  "url": "/hotel/rahat-palace",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 46,
-  "url": "/hotel/best-western",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 47,
-  "url": "/hotel/uyut-and-kazzole",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 48,
-  "url": "/hotel/rixos",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 49,
-  "url": "/hotel/mercure-hotel",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 50,
-  "url": "/hotel/royal-mezbon",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 51,
-  "url": "/hotel/city-palace",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 52,
-  "url": "/hotel/grand-samarkand",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 53,
-  "url": "/hotel/diyora",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 54,
-  "url": "/hotel/emirhan",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 55,
-  "url": "/hotel/omar-khayyam",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 56,
-  "url": "/hotel/zargaron-plaza",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 57,
-  "url": "/hotel/asia-bukhara",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 58,
-  "url": "/hotel/khiva-palace",
-  "changefreq": "monthly",
-  "priority": 0.8,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 59,
-  "url": "/coming-soon",
-  "changefreq": "monthly",
-  "priority": 0.1,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-},
-{
-  "id": 60,
-  "url": "/terms",
-  "changefreq": "monthly",
-  "priority": 0.5,
-  "lastmod": "2023-10-19T21:30:00+00:00"
-}
-  ];
+const Sitemap = () => {};
 
-  // We generate the XML sitemap with the posts data
-  const sitemap = generateSiteMap(sitemapUrl);
+export const getServerSideProps = ({ res }) => {
+  // const baseUrl = {
+  //   development: "http://localhost:5000",
+  //   production: "https://mydomain.com",
+  // }[process.env.BASE_URL];
+  
+  const blogsUrl = getBlogsUrl();
+  const destinationUrl = getDestinationUrl();
+  const hotelUrl = getHotelUrl();
+  const b2bDmcUrl = getB2bDmcUrl();
 
-  res.setHeader('Content-Type', 'text/xml');
-  // we send the XML to the browser
+  const staticPages = fs
+    .readdirSync("pages")
+    .filter((staticPage) => {
+      return ![
+        "api",
+        "_app.js",
+        "_document.js",
+        "index.js",
+        "layout",
+        "sitemap.xml.js",
+        "feed.xml.js",
+        "b2bDmc",
+        "destination",
+        "hotel",
+        "coming-soon.js",
+        "404.js",
+      ].includes(staticPage);
+    })
+    .map((staticPagePath) => {
+      return `${process.env.BASE_URL}/${staticPagePath}`;
+    });
+
+    const urls = staticPages.concat(blogsUrl, destinationUrl,hotelUrl,b2bDmcUrl)
+
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"  >
+      ${urls
+        .map((url) => {
+          return `
+            <url>
+              <loc>${url}</loc>
+              <lastmod>${new Date().toISOString()}</lastmod>
+              <changefreq>monthly</changefreq>
+              <priority>1.0</priority>
+            </url>
+          `;
+        })
+        .join("")}
+    </urlset>
+  `;
+
+  res.setHeader("Content-Type", "text/xml");
   res.write(sitemap);
   res.end();
 
   return {
     props: {},
   };
-}
+};
 
-export default SiteMap;
-
-
+export default Sitemap;
 
 
-{/* <loc>https://yourwebsite.com/</loc>
-<changefreq>daily</changefreq>
-<priority>1.0</priority> */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import siteData from '../data/sitemapUrl';
+
+// function generateSiteMap(sitemapData) {
+//   return `<?xml version="1.0" encoding="UTF-8"?>
+//    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+//      ${sitemapData.map((item) => {
+//          return `
+//        <url>
+//           <loc>${`${process.env.BASE_URL}${item.url}`}</loc>
+//           <lastmod>${item.lastmod}</lastmod>
+//           <changefreq>${item.changefreq}</changefreq>
+//           <priority>${item.priority}</priority>
+//        </url>
+//      `;
+//        })
+//        .join('')}
+//    </urlset>
+//  `;
+// }
+
+// function SiteMap() {
+//   return null;
+// }
+
+// export async function getServerSideProps({ res }) {
+//   const sitemapUrl = siteData;
+  
+//   const sitemap = generateSiteMap(sitemapUrl);
+
+//   res.setHeader('Content-Type', 'text/xml');
+
+//   res.write(sitemap);
+//   res.end();
+
+//   return {
+//     props: {},
+//   };
+// }
+
+// export default SiteMap;

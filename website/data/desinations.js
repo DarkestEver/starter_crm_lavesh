@@ -95,6 +95,26 @@ export const destinations = [
       { img: "/img/destinations/city/cappadocia/cappadocia-bg.jpg" , cityName: "Cappadocia", routePath: "/destination/cappadocia" },
       { img: "/img/destinations/city/antalya/antalya-bg.jpg" , cityName: "Antayla", routePath: "/destination/antalya" },
     ],
+    metaDescription: "Eurasia B2B Global DMC Pvt Ltd is an Destination Management Company (DMC) for TURKEY,RUSSIA,AZERBAIJAN,KAZAKHSTAN,UZBEKISTAN,ARMENIA,GEORGIA.Tour,Holiday,Honeymoon,Packages",
+    keywords: "eurasia globalTurkey dmc,Turkey best packages,Turkey best dmc,Turkey top dmc,Istanbul packages",
+    highlightsData: [{
+        id: 1,
+        img: "/img/highlights/turkey/iskender-kebab.jpg",
+        title: "Iskender Kebab",
+        meta: "Food",
+      },
+      {
+        id: 2,
+        img: "/img/highlights/turkey/great-mosque of-divrigi.jpg",
+        title: "Great Mosque of Divriği",
+        meta: "Holy Place",
+      },
+      {
+        id: 3,
+        img: "/img/highlights/turkey/ephesus-ancient-city.jpg",
+        title: "Ephesus Ancient City",
+        meta: "Tourist Attraction",
+      }],
   },
   {
     id: 2,
@@ -115,6 +135,24 @@ export const destinations = [
     currency: "Russian Ruble",
     exchange: "1 INR = 0.98RUB",
     bestTimeToVisit: "JUL",
+    metaDescription: "Explore curated Russia tour packages,perfect for unforgettable family and group holidays. Experience the world with Eurasia B2B DMC,your trusted partner in travel excellence",
+    keywords: "Russia Tour Package,Russia Holiday Package,Russia Tour Package,Russia Holiday Package",
+    highlightsData: [{
+      img: "/img/highlights/russia/pelmeni.jpg",
+      title: "Pelmeni (Russian Dumplings)",
+      meta: "Food",
+    },
+    {
+      img: "/img/highlights/russia/kazan-cathedral.jpg",
+      title: "Kazan Cathedral",
+      meta: "Holy Place",
+    },
+    {
+      img: "/img/highlights/russia/hermitage-museum.jpg",
+      title: "Hermitage Museum",
+      meta: "Tourist Attraction",
+    },
+    ],
   },
   {
     id: 3,
@@ -141,6 +179,23 @@ export const destinations = [
       { img: "/img/destinations/city/bukhara/bukhara-bg.jpg" , cityName: "Bukhara", routePath: "/destination/bukhara" },
       { img: "/img/destinations/city/khiva/khiva-bg.jpg" , cityName: "Khiva", routePath: "/destination/khiva" },
     ],
+    metaDescription: "Eurasia B2B Global DMC,Uzbekistan Holiday Tour Packages,Uzbekistan Tour Packages,Uzbekistan Packages,Uzbekistan DMCUzbekistan family tour,Uzbekistan honeymoon packages",
+    keywords: "Uzbekistan Holiday Tour Packages,Uzbekistan Tour Packages,Uzbekistan Packages,Uzbekistan DMC,Tashkent DMC,Tashkent Holiday Packages,Uzbekistan family tour,Uzbekistan honeymoon packages,Uzbekistan group tour",
+    highlightsData: [{
+      img: "/img/highlights/uzbekistan/manti.jpg",
+      title: "Manti (Uzbek Dumplings)",
+      meta: "Food",
+    },
+    {
+      img: "/img/highlights/uzbekistan/kukeldash-madrasah.jpg",
+      title: "Kukeldash Madrasah",
+      meta: "Holy Place",
+    },
+    {
+      img: "/img/highlights/uzbekistan/charvak-reservoir.jpg",
+      title: "Charvak Reservoir",
+      meta: "Tourist Attraction",
+    }],
     
   },
   {
@@ -162,6 +217,23 @@ export const destinations = [
     currency: "Armenian Dram",
     exchange: "1 INR = 1.55AMD",
     bestTimeToVisit: "APR",
+    metaDescription: "Discover tailor-made Armenia tour packages,designed for unforgettable family and group adventures. Elevate your travel experience with Eurasia B2B DMC",
+    keywords: "Armenia Tour Package,Holiday Package,Family Tour,Group Tour",
+    highlightsData: [{
+      img: "/img/highlights/armenia/khorovats.jpg",
+      title: "Khorovats (Armenian Barbecue)",
+      meta: "Food",
+    },
+    {
+      img: "/img/highlights/armenia/geghard-monastery.jpg",
+      title: "Geghard Monastery",
+      meta: "Holy Place",
+    },
+    {
+      img: "/img/highlights/armenia/lake-sevan.jpg",
+      title: "Lake Sevan",
+      meta: "Tourist Attraction",
+    }],
   },
   {
     id: 5,
@@ -182,6 +254,23 @@ export const destinations = [
     currency: "Georgian Lari",
     exchange: "1 INR = 0.030GEL",
     bestTimeToVisit: "SEP",
+    metaDescription: "Explore tailored Georgia tour packages designed for unforgettable family and group experiences. Let Eurasia B2B DMC be your guides to creating cherished memories on your holiday adventure",
+    keywords: "Georgia Tour Package,Georgia Holiday Package,Georgia Family Tour,Georgia  Group Tour",
+    highlightsData: [{
+      img: "/img/highlights/georgia/mtsvadi.jpg",
+      title: "Mtsvadi (Georgian Grilled Meat)",
+      meta: "Food",
+    },
+    {
+      img: "/img/highlights/georgia/bagrati-cathedral.jpg",
+      title: "Bagrati Cathedral",
+      meta: "Holy Place",
+    },
+    {
+      img: "/img/highlights/georgia/vardzia-cave monastery.jpg",
+      title: "Vardzia Cave Monastery",
+      meta: "Tourist Attraction",
+    }],
   },
   {
     id: 6,
@@ -205,6 +294,25 @@ export const destinations = [
     city: [ 
       { img: "/img/destinations/city/baku/baku-bg.jpg" , cityName: "Baku", routePath: "/destination/baku" }
     ],
+    metaDescription: "Eurasia B2B Global DMC ,Baku Holiday Packages,Baku DMC,Azerbaijan DMC,Azerbaijan Packages,CIS DMC,Baku Tour Packages,Baku holiday packages,Baku family Tour,Baku Honeymoon Packages,Baku Packages,Baku Lowest B2b,Baku Departures ,Azerbaijan holiday packages. Azerbaijan family tour,Azerbaijan honeymoon packages.",
+    keywords: "Azerbaijan DMC,Azerbaijan Packages,eurasia global Azerbaijan honeymoon packages",
+    highlightsData: [
+        {
+          img: "/img/highlights/azerbaijan/khingal.jpg",
+          title: "Khingal (Azerbaijani Pasta)",
+          meta: "Food",
+        },
+        {
+          img: "/img/highlights/azerbaijan/sheikh-zahed-grand-mosque.jpg",
+          title: "Sheikh Zahed Grand Mosque",
+          meta: "Holy Place",
+        },
+        {
+          img: "/img/highlights/azerbaijan/khinalug-village.jpg",
+          title: "Khinalug Village",
+          meta: "Tourist Attraction",
+        },
+      ],
   },
   {
     id: 7,
@@ -228,6 +336,23 @@ export const destinations = [
     city: [ 
       { img: "/img/destinations/city/almaty/almaty-bg.jpg" , cityName: "Almaty", routePath: "/destination/almaty" }
     ],
+    metaDescription: "Eurasia B2B Global DMC,Kazakhstan Holiday Tour Packages,Kazakhstan Tour Packages,Kazakhstan Packages,Kazakhstan DMC,Kazakhstan family tour,Kazakhstan honeymoon packages,Kazakhstan group tour",
+    keywords: "eurasia global Kazakhstan Tour Packages,Kazakhstan holiday packages,Kazakhstan Honeymoon Packages",
+    highlightsData: [{
+      img: "/img/highlights/kazakhstan/baursak.jpg",
+      title: "Baursak (Kazakh Fried Dough)",
+      meta: "Food",
+    },
+    {
+      img: "/img/highlights/kazakhstan/hazrat-sultan-mosque.jpg",
+      title: "Hazrat Sultan Mosque",
+      meta: "Holy Place",
+    },
+    {
+      img: "/img/highlights/kazakhstan/kolsai-lakes.jpg",
+      title: "Kolsai Lakes",
+      meta: "Tourist Attraction",
+    }],
   },
   {
     id: 8,
@@ -248,6 +373,23 @@ export const destinations = [
     currency: "Kyrgyzstani Som",
     exchange: "1 INR = 0.88KGS",
     bestTimeToVisit: "AUG",
+    metaDescription: "Unlock the allure of Bishkek with Eurasia Global. Delve into curated Bishkek tour packages,ideal for enriching family adventures and seamless group getaways.",
+    keywords: "Bishkek Tour Package,Bishkek Holiday Package,Bishkek Family Tour,Bishkek Group Tour",
+    highlightsData: [{
+      img: "/img/highlights/bishkek/shashlik.jpg",
+      title: "Shashlik (Kyrgyz Grilled Skewers)",
+      meta: "Food",
+    },
+    {
+      img: "/img/highlights/bishkek/bishkek-central-mosque.jpg",
+      title: "Bishkek Central Mosque",
+      meta: "Holy Place",
+    },
+    {
+      img: "/img/highlights/bishkek/ala-too-square.jpg",
+      title: "Ala-Too Square",
+      meta: "Tourist Attraction",
+    }],
   },
   {
     "id": 9,
@@ -267,7 +409,24 @@ export const destinations = [
     "timeBehind": "2 hours ahead",
     "currency": "Turkish Lira",
     "exchange": "1 INR = 0.082 TRY",
-    "bestTimeToVisit": "APR-OCT"
+    "bestTimeToVisit": "APR-OCT",
+    metaDescription: "Unleash the magic of this historic city with Eurasia Global, your trusted Destination Management Company. Explore Istanbul with confidence and ease.",
+    keywords: "Istanbul DMC Services,Top Istanbul DMC, Istanbul Vacation Deals, Istanbul Tour Packages, Istanbul Fixed Departure, Eurasia Global Istanbul",
+    highlightsData: [{
+      img: "/img/highlights/turkey/istanbul/balik-ekmek.jpg",
+      title: "Balik Ekmek (Fish Sandwich)",
+      meta: "Food",
+    },
+    {
+      img: "/img/highlights/turkey/istanbul/blue-mosque.jpg",
+      title: "Blue Mosque (Sultan Ahmed Mosque)",
+      meta: "Holy Place",
+    },
+    {
+      img: "/img/highlights/turkey/istanbul/basilica-cistern.jpg",
+      title: "Basilica Cistern",
+      meta: "Tourist Attraction",
+    }],
 },
   {
     "id": 10,
@@ -287,7 +446,24 @@ export const destinations = [
     "timeBehind": "2 hours ahead",
     "currency": "Turkish Lira",
     "exchange": "1 INR = 0.082 TRY",
-    "bestTimeToVisit": "APR-OCT"
+    "bestTimeToVisit": "APR-OCT",
+    metaDescription: "Eurasia Global, your premier Destination Management Company, offers unparalleled experiences. Explore the wonders of Cappadocia with us.",
+    keywords: "Cappadocia Travel Deals, B2B Packages Cappadocia, Cappadocia DMC Services,Eurasia Global Cappadocia",
+    highlightsData: [{
+      img: "/img/highlights/turkey/cappadocia/hunkar-begendi.PNG",
+      title: "Hünkar Beğendi (Sultan's Delight)",
+      meta: "Food",
+    },
+    {
+      img: "/img/highlights/turkey/cappadocia/uchisar-castle.jpg",
+      title: "Uçhisar Castle",
+      meta: "Holy Place",
+    },
+    {
+      img: "/img/highlights/turkey/cappadocia/zelve-open-air-museum.jpg",
+      title: "Zelve Open-Air Museum",
+      meta: "Tourist Attraction",
+    }],
   },
   {
     "id": 11,
@@ -307,7 +483,24 @@ export const destinations = [
     "timeBehind": "2 hours ahead",
     "currency": "Turkish Lira",
     "exchange": "1 INR = 0.082 TRY",
-    "bestTimeToVisit": "APR-NOV"
+    "bestTimeToVisit": "APR-NOV",
+    metaDescription: "Eurasia Global, your trusted Destination Management Company, offers the best of Antalya. Immerse yourself in unforgettable experiences with us.",
+    keywords: "Antalya Holiday Packages, B2B Deals Antalya, Antalya DMC Services, Best Antalya Vacation Packages,Eurasia Global Antalya",
+    highlightsData: [{
+      img: "/img/highlights/turkey/antalya/ali-nazik-kebab.jpg",
+      title: "Ali Nazik Kebab",
+      meta: "Food",
+    },
+    {
+      img: "/img/highlights/turkey/antalya/murat-pasha-mosque.jpg",
+      title: "Murat Pasha Mosque",
+      meta: "Holy Place",
+    },
+    {
+      img: "/img/highlights/turkey/antalya/duden-waterfalls.jpg",
+      title: "Düden Waterfalls",
+      meta: "Tourist Attraction",
+    }],
   },
   {
     "id": 12,
@@ -327,7 +520,24 @@ export const destinations = [
     "timeBehind": "1 hour ahead",
     "currency": "Azerbaijani Manat",
     "exchange": "1 INR = 0.021 AZN",
-    "bestTimeToVisit": "APR-JUN, SEP-OCT"
+    "bestTimeToVisit": "APR-JUN, SEP-OCT",
+    metaDescription: "Eurasia Global, a premier Destination Management Company, invites you to discover the vibrant cityscape of Baku. Your journey to Baku begins with us.",
+    keywords: "Baku Travel Packages, B2B Deals Baku, Baku DMC Services,Top Baku DMC, Eurasia Global Baku",
+    highlightsData: [{
+      img: "/img/highlights/azerbaijan/baku/badimcan-dolma.jpg",
+      title: "Badimcan Dolma (Stuffed Eggplant)",
+      meta: "Food",
+    },
+    {
+      img: "/img/highlights/azerbaijan/baku/tezepir-mosque.jpg",
+      title: "Tezepir Mosque",
+      meta: "Holy Place",
+    },
+    {
+      img: "/img/highlights/azerbaijan/baku/baku-boulevard.jpg",
+      title: "Baku Boulevard",
+      meta: "Tourist Attraction",
+    }],
 },
   {
     "id": 19,
@@ -347,7 +557,24 @@ export const destinations = [
     "timeBehind": "1 hour ahead",
     "currency": "Azerbaijani Manat",
     "exchange": "1 INR = 0.021 AZN",
-    "bestTimeToVisit": "APR-JUN, SEP-OCT"
+    "bestTimeToVisit": "APR-JUN, SEP-OCT",
+    metaDescription: "Eurasia Global, your trusted Destination Management Company, offers unforgettable experiences in Almaty. Immerse yourself in the wonders of Almaty with us.",
+    keywords: "Almaty Holiday Packages,Almaty DMC Services, Best Almaty Vacation Packages,Eurasia Global Almaty",
+    highlightsData: [{
+      img: "/img/highlights/kazakhstan/almaty/shubat.jpg",
+      title: "Shubat (Fermented Camel Milk)",
+      meta: "Food",
+    },
+    {
+      img: "/img/highlights/kazakhstan/almaty/ascension-cathedral.jpg",
+      title: "Ascension Cathedral",
+      meta: "Holy Place",
+    },
+    {
+      img: "/img/highlights/kazakhstan/almaty/kok-tobe-hill.jpg",
+      title: "Kok Tobe Hill",
+      meta: "Tourist Attraction",
+    }],
 },
 {
   "id": 18,
@@ -367,7 +594,24 @@ export const destinations = [
   "timeBehind": "3 hours ahead",
   "currency": "Uzbekistani Som",
   "exchange": "1 INR = 0.08 UZS",
-  "bestTimeToVisit": "APR-JUN, SEP-OCT"
+  "bestTimeToVisit": "APR-JUN, SEP-OCT",
+  metaDescription: "Eurasia Global, a leading Destination Management Company, invites you to discover the wonders of Tashkent. Your unforgettable journey begins with us.",
+  keywords: "Tashkent Travel Packages,Tashkent DMC Services, Best Tashkent Tours,Eurasia Global Tashkent",
+  highlightsData: [{
+    img: "/img/highlights/uzbekistan/tashkent/norin.jpg",
+    title: "Norin (Uzbek Noodle Dish)",
+    meta: "Food",
+  },
+  {
+    img: "/img/highlights/uzbekistan/tashkent/barak-khan-madrasah.jpg",
+    title: "Barak-Khan Madrasah",
+    meta: "Holy Place",
+  },
+  {
+    img: "/img/highlights/uzbekistan/tashkent/tashkent-tv-tower.jpg",
+    title: "Tashkent TV Tower",
+    meta: "Tourist Attraction",
+  }],
 },
 {
   "id": 15,
@@ -387,7 +631,24 @@ export const destinations = [
   "timeBehind": "3 hours ahead",
   "currency": "Uzbekistani Som",
   "exchange": "1 INR = 0.08 UZS",
-  "bestTimeToVisit": "APR-JUN, SEP-OCT"
+  "bestTimeToVisit": "APR-JUN, SEP-OCT",
+  metaDescription: "Eurasia Global, a trusted Destination Management Company, invites you to explore the rich cultural tapestry of Samarkand. Your journey of discovery begins with us.",
+  keywords: "Samarkand Travel Packages, B2B Deals Samarkand,Eurasia Global Samarkand",
+  highlightsData: [{
+    img: "/img/highlights/uzbekistan/samarkand/samsa.jpg",
+    title: "Samsa (Uzbek Pastry)",
+    meta: "Food",
+  },
+  {
+    img: "/img/highlights/uzbekistan/samarkand/bibi-khanymm-osque.jpg",
+    title: "Bibi-Khanym Mosque",
+    meta: "Holy Place",
+  },
+  {
+    img: "/img/highlights/uzbekistan/samarkand/ulugh-beg-observatory.jpg",
+    title: "Ulugh Beg Observatory",
+    meta: "Tourist Attraction",
+  }],
 },
 {
   "id": 16,
@@ -407,7 +668,24 @@ export const destinations = [
   "timeBehind": "3 hours ahead",
   "currency": "Uzbekistani Som",
   "exchange": "1 INR = 0.08 UZS",
-  "bestTimeToVisit": "APR-JUN, SEP-OCT"
+  "bestTimeToVisit": "APR-JUN, SEP-OCT",
+  metaDescription: "Eurasia Global, your premier Destination Management Company, invites you to uncover the treasures of Bukhara. Experience the magic of Bukhara with us.",
+  keywords: "Bukhara Holiday Packages, B2B Deals Bukhara, Bukhara DMC Services,Eurasia Global Bukhara",
+  highlightsData: [{
+    img: "/img/highlights/uzbekistan/bukhara/naryn.jpg",
+    title: "Naryn (Uzbek Noodle Soup)",
+    meta: "Food",
+  },
+  {
+    img: "/img/highlights/uzbekistan/bukhara/bolo-hauz-mosque.PNG",
+    title: "Bolo Hauz Mosque",
+    meta: "Holy Place",
+  },
+  {
+    img: "/img/highlights/uzbekistan/bukhara/lyabi-hauz-complex.PNG",
+    title: "Lyabi-Hauz Complex",
+    meta: "Tourist Attraction",
+  }],
 },
 {
   "id": 17,
@@ -427,7 +705,24 @@ export const destinations = [
   "timeBehind": "3 hours ahead",
   "currency": "Uzbekistani Som",
   "exchange": "1 INR = 0.08 UZS",
-  "bestTimeToVisit": "APR-JUN, SEP-OCT"
+  "bestTimeToVisit": "APR-JUN, SEP-OCT",
+  metaDescription: "Eurasia Global, a leading Destination Management Company, invites you to explore the cultural wonders of Khiva. Your journey to Khiva starts with us.",
+  keywords: "Khiva Travel Deals, B2B Packages Khiva, Khiva DMC Services, Eurasia Global Khiva",
+  highlightsData: [{
+    img: "/img/highlights/uzbekistan/khiva/shavlya.jpg",
+    title: "Shavlya (Uzbek Grilled Meat)",
+    meta: "Food",
+  },
+  {
+    img: "/img/highlights/uzbekistan/khiva/juma-mosque.jpg",
+    title: "Juma Mosque",
+    meta: "Holy Place",
+  },
+  {
+    img: "/img/highlights/uzbekistan/khiva/tash-hauli-palace.jpg",
+    title: "Tash-Hauli Palace",
+    meta: "Tourist Attraction",
+  }],
 }
 
 ];

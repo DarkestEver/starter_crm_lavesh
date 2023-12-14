@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
+import Image from "next/image";
 import Link from "next/link";
 import MainMenu from "../MainMenu";
 import MobileMenu from "../MobileMenu";
-import Image from "next/image";
 
 const Header1 = () => {
   const [navbar, setNavbar] = useState(false);
@@ -28,7 +28,7 @@ const Header1 = () => {
             <div className="col-4">
               <div className="d-flex items-center">
                 <Link href="/" className="header-logo mr-20" style={{width: "110px"}}>
-                  <Image width={120} height={120} priority={true} src="/img/general/WHITE LOGO EURASIA GLOBAL.png" alt="logo icon" />
+                  <Image width={120} height={120} priority={true} src="/img/general/white-eurasia-global-logo.png" alt="logo icon" />
                 </Link>
 
               </div>

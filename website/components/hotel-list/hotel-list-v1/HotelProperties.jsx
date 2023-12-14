@@ -1,8 +1,9 @@
-import { hotelsData } from "../../../data/hotels";
-import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+
 import Image from "next/image";
 import Link from "next/link";
+import { hotelsData } from "../../../data/hotels";
 
 const HotelProperties = () => {
   return (
@@ -151,7 +152,7 @@ const HotelProperties = () => {
                   </div>
 
                   <Link
-                    href={`/hotel/hotel-single-v1/${item.id}`}
+                    href=''
                     className="button -md -dark-1 bg-blue-1 text-white mt-24"
                   >
                     See Availability{" "}

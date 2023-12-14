@@ -16,10 +16,10 @@ import TestimonialRating from "../../components/home/TestimonialRating";
 const structuredData = JSON.stringify({
   "@context": "http://schema.org",
   "@type": "WebSite",
-  "name": "Eurasia Global DMC",
-  "url": "https://www.eurasiaglobaldmc.com",
-  "description": "Your gateway to extraordinary journeys. Explore the world with Eurasia Global DMC - your trusted travel partner offering unique and unforgettable travel experiences.",
-  "image": "https://www.eurasiaglobaldmc.com/img/seo/home-page.png"
+  "name": `${process.env.WEBSITE_NAME}`,
+  "url": `${process.env.BASE_URL}`,
+  "description": `Your gateway to extraordinary journeys. Explore the world with ${process.env.WEBSITE_NAME} - your trusted travel partner offering unique and unforgettable travel experiences.`,
+  "image": `${process.env.BASE_URL}/img/seo/home-page.png`
   // Add more properties as needed
 });
 
@@ -30,14 +30,14 @@ const Home = () => {
     <>
       <Seo 
         pageTitle="Home" 
-        metaTitle="Eurasia Global DMC - Your Gateway to Extraordinary Journeys" 
-        metaDescription="Explore the world with Eurasia Global DMC - your trusted travel partner offering unique and unforgettable travel experiences." 
+        metaTitle={`${process.env.WEBSITE_NAME} - Your Gateway to Extraordinary Journeys`}
+        metaDescription={`Eurasia B2B Global DMC Pvt Ltd is an Destination Management Company (DMC) for TURKEY,RUSSIA,AZERBAIJAN,KAZAKHSTAN,UZBEKISTAN,ARMENIA,GEORGIA.Tour,Holiday,Honeymoon,Packages`}
         ogImage={`${process.env.BASE_URL}/img/seo/home-page.png`}
         ogImageAlt="home-page-image" 
-        twitterHandle="@eurassia" 
+        twitterHandle="@Eurasiab2bdmc" 
         canonicalUrl={`${process.env.BASE_URL}`} 
         robotsContent="index, follow"
-        keywords="Travel Experiences, Adventure Travel, Vacation Destinations, Custom Travel Packages, Explore Journeys, Holiday Planning, Wanderlust Adventures, Travel Inspiration, Discover New Places, Memorable Trips"
+        keywords="eurasia global,eurasia global dmc, eurasia DMC, eurasia, eurasia b2b, eurasia b2b dmc"
         structuredDataScript={structuredData}
       />
 

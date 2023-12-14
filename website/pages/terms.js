@@ -13,7 +13,7 @@ const Terms = () => {
 
       <DefaultHeader />
 
-      <section className="layout-pt-lg layout-pb-lg">
+      <section className="layout-pt-sm layout-pb-lg">
         <div className="container">
           <div className="tabs js-tabs">
             <TermsConent />

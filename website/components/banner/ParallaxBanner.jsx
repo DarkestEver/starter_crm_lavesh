@@ -19,7 +19,7 @@ const ParallaxBanner = () => {
               </h2>
               <div className="d-inline-block mt-30">
                 <Link
-                  href="/hotel/hotel-list-v5"
+                  href=""
                   className="button -md -blue-1 bg-white text-dark-1"
                 >
                   Find Deals
